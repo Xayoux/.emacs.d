@@ -283,7 +283,7 @@
   (TeX-source-correlate-mode t)
   (TeX-source-correlate-method (quote synctex))
   (TeX-source-correlate-start-server (quote ask))
-  (TeX-PDF-mode t)
+  ;;(TeX-PDF-mode t)
   (TeX-electric-sub-and-superscript 1)
   (LaTeX-math-list
    '(
@@ -333,6 +333,11 @@ textsc" "textup"))))
   :config
   (setq-default TeX-auto-parse-length 200
 		TeX-master nil)
+
+   (if is-mswindows
+      (setq preview-gs-command
+   	    "C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe")
+     (setq preview-gs-command "gs"))
 
   (defun my-tex-compile ()
     "Save and compile TeX document"
@@ -458,9 +463,9 @@ textsc" "textup"))))
   (org-cite-global-bibliography
    (list (substitute-in-file-name "${BIBINPUTS}/References.bib"))))
 
-(use-package org-fragtog
-  :hook
-  (org-mode . org-fragtog-mode))
+;;(use-package org-fragtog
+  ;;:hook
+  ;;(org-mode . org-fragtog-mode))
 
 (use-package org-roam
   :ensure t
