@@ -558,6 +558,7 @@ For a modern-looking =org-mode=, use =org-modern=.
 #+end_src
 
 *** Org-roam
+Think about changin path to template files.
 #+begin_src emacs-lisp
 (use-package org-roam
   :ensure t
@@ -566,7 +567,7 @@ For a modern-looking =org-mode=, use =org-modern=.
   (setq org-roam-v2-ack t)
   (setq org-roam-node-display-template "${tags:50} ${title:100}")
   :custom
-  (org-roam-directory "~/Documents/RoamNotes") ;; changer sur chaque ordi
+  (org-roam-directory "~/Documents/RoamNotes") 
   (org-roam-completion-everywhere t)
   (org-roam-capture-templates
    '(
@@ -613,15 +614,22 @@ For a modern-looking =org-mode=, use =org-modern=.
 (org-roam-setup)
 (require 'org-roam-dailies) ;; Ensure the keymap is available
   (org-roam-db-autosync-mode))
+#+end_src
 
+Insert node immediately without open it.
 
+#+begin_src emacs-lisp
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
   (let ((args (push arg args))
         (org-roam-capture-templates (list (append (car org-roam-capture-templates)
                                                   '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
+#+end_src
 
+Prefilter nodes with their tags.
+
+#+begin_src emacs-lisp
 (defun my/org-roam-filter-by-tag (tag-name)
   (lambda (node)
     (member tag-name (org-roam-node-tags node))))
@@ -631,10 +639,14 @@ For a modern-looking =org-mode=, use =org-modern=.
           (seq-filter
            (my/org-roam-filter-by-tag tag-name)
            (org-roam-node-list))))
+#+end_src
 
+Refresh the list of files entering in the agenda (Only files with "Projects tag")
+
+#+begin_src emacs-lisp
 (defun my/org-roam-refresh-agenda-list ()
   (interactive)
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project"))) ;;tags entering in the agenda
 
 ;; Build the agenda list the first time for the session
 (my/org-roam-refresh-agenda-list)
@@ -649,7 +661,11 @@ capture was not aborted."
   (unless org-note-abort
     (with-current-buffer (org-capture-get :buffer)
       (add-to-list 'org-agenda-files (buffer-file-name)))))
+#+end_src
 
+Find and open or create "Projects" nodes.
+
+#+begin_src emacs-lisp
 (defun my/org-roam-find-project ()
   (interactive)
   ;; Add the project file to the agenda after capture is finished
@@ -665,7 +681,11 @@ capture was not aborted."
    '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
       :unnarrowed t))))
+#+end_src
 
+Find and open of create "article" nodes.
+
+#+begin_src emacs-lisp
 (defun my/org-roam-find-article ()
   (interactive)
   ;; Add the project file to the agenda after capture is finished
@@ -681,8 +701,11 @@ capture was not aborted."
    '(("a" "article" plain (file "~/Documents/RoamNotes/Templates/article-template.org")
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n")
       :unnarrowed t))))
+#+end_src
 
+Other functionalities.
 
+#+begin_src emacs-lisp
 (defun my/org-roam-capture-inbox ()
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
@@ -702,7 +725,11 @@ capture was not aborted."
                                    :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
                                                           "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
                                                           ("Tasks"))))))
+#+end_src
 
+Add accomplished TODO in a daily node.
+
+#+begin_src emacs-lisp
 (defun my/org-roam-copy-todo-to-today ()
   (interactive)
   (let ((org-refile-keep t) ;; Set this to nil to delete the original!
@@ -798,7 +825,6 @@ Use "C-TAB" for moving to next field to avoid conflict with autocompletion.
 	      ("M-C-<tab>" . yas-next-field-or-maybe-expand)))
 #+end_src
 
-** Programming tools
 *** Emacs Speaks Statistics (ESS)
 The directory containing the R binary must be in your PATH environment variable.
 #+begin_src emacs-lisp

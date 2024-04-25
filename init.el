@@ -469,7 +469,7 @@ textsc" "textup"))))
   (setq org-roam-v2-ack t)
   (setq org-roam-node-display-template "${tags:50} ${title:100}")
   :custom
-  (org-roam-directory "~/Documents/RoamNotes") ;; changer sur chaque ordi
+  (org-roam-directory "~/Documents/RoamNotes") 
   (org-roam-completion-everywhere t)
   (org-roam-capture-templates
    '(
@@ -517,7 +517,6 @@ textsc" "textup"))))
 (require 'org-roam-dailies) ;; Ensure the keymap is available
   (org-roam-db-autosync-mode))
 
-
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
   (let ((args (push arg args))
@@ -537,7 +536,7 @@ textsc" "textup"))))
 
 (defun my/org-roam-refresh-agenda-list ()
   (interactive)
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project"))) ;;tags entering in the agenda
 
 ;; Build the agenda list the first time for the session
 (my/org-roam-refresh-agenda-list)
@@ -584,7 +583,6 @@ capture was not aborted."
    '(("a" "article" plain (file "~/Documents/RoamNotes/Templates/article-template.org")
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n")
       :unnarrowed t))))
-
 
 (defun my/org-roam-capture-inbox ()
   (interactive)
