@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: demo
+# key: demo
+# --
+
+ceci est une démonstration
+${1:Romain}
+
+${2:patrice}
+
+$0

@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: table_latex
+# key: table
+# --
+
+\begin{table}[${1:ht}]
+\centering
+\begin{tabular}{${2:lrr}}
+\hline
+$3 & $4 & $5 \\\
+\hline
+\input{$6}\\\
+\hline
+\end{tabular}
+\caption{$7}
+$0
+\end{table}

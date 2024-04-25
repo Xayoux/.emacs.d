@@ -1,0 +1,43 @@
+# -*- mode: snippet -*-
+# name: latex-template
+# key: latex
+# --
+\documentclass[french,10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{natbib}
+\usepackage{babel}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{tablefootnote}
+\usepackage{array}
+\usepackage{tabularray}
+\geometry{hmargin=${1:2.5}cm,vmargin=${2:1.5}cm}
+
+\title{$3}
+
+\author{${4:Romain CAPLIEZ}}
+
+\begin{document}
+
+\maketitle
+
+$0
+
+
+
+
+
+
+
+
+
+
+%\newpage
+%\bibliographystyle{apalike}
+%\bibliography{bibliographie.bib}
+
+\end{document}
+

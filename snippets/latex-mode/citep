@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: citep
+# key: citep
+# --
+\citep{$0}

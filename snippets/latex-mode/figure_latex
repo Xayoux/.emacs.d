@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: figure_latex
+# key: figure
+# --
+\begin{figure}[${1:!h}]
+\centering
+\includegraphics[width=0.8\linewidth]{$2}
+\caption{$3}
+$0
+\end{figure}

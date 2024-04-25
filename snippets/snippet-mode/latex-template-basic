@@ -1,0 +1,39 @@
+# key: latex
+# name: latex-template-basic
+# --
+\\documentclass[french,10pt,a4paper]{article}
+\\usepackage[T1]{fontenc}
+\\usepackage{graphicx}
+\\usepackage{xcolor}
+\\usepackage{mathtools}
+\\usepackage{natbib}
+\\usepackage{babel}
+\\usepackage{geometry}
+
+\\geometry{hmargin=${1:2.5}cm,vmargin=${2:1.5}cm}
+
+\\title{$3}
+
+\\author{${4:Romain Capliez}}
+
+\\begin{document}
+
+\\maketitle
+
+$0
+
+
+
+
+
+
+
+
+
+
+
+%\\newpage
+%\\bibliographystyle{apalike}
+%\\bibliography{bibliographie.bib}
+
+\\end{document}
