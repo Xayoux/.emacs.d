@@ -558,7 +558,7 @@ For a modern-looking =org-mode=, use =org-modern=.
 #+end_src
 
 *** Org-roam
-Think about changin path to template files.
+Think about changing paths to template files.
 #+begin_src emacs-lisp
 (use-package org-roam
   :ensure t
