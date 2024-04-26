@@ -334,10 +334,7 @@ textsc" "textup"))))
   (setq-default TeX-auto-parse-length 200
 		TeX-master nil)
 
-   (if is-mswindows
-      (setq preview-gs-command
-   	    "C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe")
-     (setq preview-gs-command "gs"))
+  
 
   (defun my-tex-compile ()
     "Save and compile TeX document"
@@ -632,6 +629,18 @@ capture was not aborted."
              (lambda ()
                (when (equal org-state "DONE")
                  (my/org-roam-copy-todo-to-today))))
+
+;; Function to be run when org-agenda is opened
+(defun org-agenda-open-hook ()
+  "Hook to be run when org-agenda is opened"
+  (olivetti-mode))
+
+;; Adds hook to org agenda mode, making follow mode active in org agenda
+(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook)
+
+;; Only show one day of the agenda at a time
+(setq org-agenda-span 1
+      org-agenda-start-day "+0d")
 
 (defun my-unfill-paragraph ()
   "Unfill paragraph."

@@ -400,10 +400,7 @@ textsc" "textup"))))
   (setq-default TeX-auto-parse-length 200
 		TeX-master nil)
 
-   (if is-mswindows
-      (setq preview-gs-command
-   	    "C:\\Program Files\\gs\\gs10.02.1\\bin\\gswin64c.exe")
-     (setq preview-gs-command "gs"))
+  
 
   (defun my-tex-compile ()
     "Save and compile TeX document"
@@ -528,7 +525,6 @@ CdLatex for super fast input of TeX mathematicals expressions
 
 *** Aesthetic
 Use =org-appear= for markup markers to appear automatically.
-
 #+begin_src emacs-lisp
 (use-package org-appear
   :hook
@@ -536,7 +532,6 @@ Use =org-appear= for markup markers to appear automatically.
 #+end_src
 
 For a modern-looking =org-mode=, use =org-modern=.
-
 #+begin_src emacs-lisp
 (use-package org-modern
     :hook
@@ -544,7 +539,6 @@ For a modern-looking =org-mode=, use =org-modern=.
 #+end_src
 
 =org-cite= for citations.
-
 #+begin_src emacs-lisp
 (use-package oc
   :ensure nil
@@ -561,7 +555,7 @@ For a modern-looking =org-mode=, use =org-modern=.
   ;;(org-mode . org-fragtog-mode))
 #+end_src
 
-*** Org-roam
+*** Orga-roam
 Think about changing paths to template files.
 #+begin_src emacs-lisp
 (use-package org-roam
@@ -621,7 +615,6 @@ Think about changing paths to template files.
 #+end_src
 
 Insert node immediately without open it.
-
 #+begin_src emacs-lisp
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
@@ -632,7 +625,6 @@ Insert node immediately without open it.
 #+end_src
 
 Prefilter nodes with their tags.
-
 #+begin_src emacs-lisp
 (defun my/org-roam-filter-by-tag (tag-name)
   (lambda (node)
@@ -646,7 +638,6 @@ Prefilter nodes with their tags.
 #+end_src
 
 Refresh the list of files entering in the agenda (Only files with "Projects tag")
-
 #+begin_src emacs-lisp
 (defun my/org-roam-refresh-agenda-list ()
   (interactive)
@@ -668,7 +659,6 @@ capture was not aborted."
 #+end_src
 
 Find and open or create "Projects" nodes.
-
 #+begin_src emacs-lisp
 (defun my/org-roam-find-project ()
   (interactive)
@@ -688,7 +678,6 @@ Find and open or create "Projects" nodes.
 #+end_src
 
 Find and open of create "article" nodes.
-
 #+begin_src emacs-lisp
 (defun my/org-roam-find-article ()
   (interactive)
@@ -708,7 +697,6 @@ Find and open of create "article" nodes.
 #+end_src
 
 Other functionalities.
-
 #+begin_src emacs-lisp
 (defun my/org-roam-capture-inbox ()
   (interactive)
@@ -732,7 +720,6 @@ Other functionalities.
 #+end_src
 
 Add accomplished TODO in a daily node.
-
 #+begin_src emacs-lisp
 (defun my/org-roam-copy-todo-to-today ()
   (interactive)
@@ -757,6 +744,25 @@ Add accomplished TODO in a daily node.
              (lambda ()
                (when (equal org-state "DONE")
                  (my/org-roam-copy-todo-to-today))))
+#+end_src
+
+*** Org-agenda
+Centre l'agenda à chaque fois que l'on l'ouvre.
+#+begin_src emacs-lisp
+;; Function to be run when org-agenda is opened
+(defun org-agenda-open-hook ()
+  "Hook to be run when org-agenda is opened"
+  (olivetti-mode))
+
+;; Adds hook to org agenda mode, making follow mode active in org agenda
+(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook)
+#+end_src
+
+Montre uniquement un jour à la fois pour limiter le nombre d'informations.
+#+begin_src emacs-lisp
+;; Only show one day of the agenda at a time
+(setq org-agenda-span 1
+      org-agenda-start-day "+0d")
 #+end_src
 ** Word wrapping and paragraph filling
 #+begin_src emacs-lisp
