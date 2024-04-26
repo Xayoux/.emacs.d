@@ -575,7 +575,6 @@ For a modern-looking =org-mode=, use =org-modern=.
   ;;:hook
   ;;(org-mode . org-fragtog-mode))
 #+end_src
-
 *** Orga-roam
 **** Basic configuration
 La configuration basique de org-roam provient de [[https://www.youtube.com/watch?v=3-sLBaJAtew][Org Roam: the best way to keep a joural in emacs]] (voir le [[https://systemcrafters.net/build-a-second-brain-in-emacs/keep-a-journal/][blog]]). 
@@ -1123,6 +1122,21 @@ To interact easily with renv
 (use-package rutils
   :defer t
   :after ess)
+#+end_src
+
+*** Smart parentheses
+Ajoute automatiquement les paires de parenthèses et autres.
+#+begin_src emacs-lisp
+(use-package smartparens-config
+  :ensure smartparens
+  :init
+  (progn
+    (add-hook 'prog-mode-hook 'smartparens-mode)
+    (add-hook 'markdown-mode-hook 'smartparens-mode)
+    (add-hook 'yaml-mode-hook 'smartparens-mode)
+    (add-hook 'org-mode-hook 'smartparens-mode)
+    (add-hook 'latex-mode-hook 'smartparens-mode))
+  :config (progn (show-smartparens-global-mode t)))
 #+end_src
 * Custom variables
 #+begin_src emacs-lisp
