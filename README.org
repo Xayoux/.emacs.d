@@ -577,7 +577,8 @@ For a modern-looking =org-mode=, use =org-modern=.
 #+end_src
 
 *** Orga-roam
-Think about changing paths to template files.
+**** Basic configuration
+La configuration basique de org-roam provient de [[https://www.youtube.com/watch?v=3-sLBaJAtew][Org Roam: the best way to keep a joural in emacs]] (voir le [[https://systemcrafters.net/build-a-second-brain-in-emacs/keep-a-journal/][blog]]). 
 #+begin_src emacs-lisp
 (use-package org-roam
   :ensure t
@@ -635,6 +636,9 @@ Think about changing paths to template files.
   (org-roam-db-autosync-mode))
 #+end_src
 
+**** Functionalities
+Les fonctionnalités présentes ici proviennent de [[https://www.youtube.com/watch?v=CUkuyW6hr18][5 org roam hacks for better productivity in emacs]] (voir [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][blog]]).
+
 Insert node immediately without open it.
 #+begin_src emacs-lisp
 (defun org-roam-node-insert-immediate (arg &rest args)
@@ -644,6 +648,7 @@ Insert node immediately without open it.
                                                   '(:immediate-finish t)))))
     (apply #'org-roam-node-insert args)))
 #+end_src
+
 
 Prefilter nodes with their tags.
 #+begin_src emacs-lisp
