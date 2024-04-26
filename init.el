@@ -45,7 +45,7 @@
 (use-package nerd-icons
   :if (display-graphic-p)
   :custom
-  (nerd-icons-font-family "JetBrainsMono NF"))
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
 (use-package nerd-icons-dired
   :if (display-graphic-p)
   :hook
@@ -64,6 +64,9 @@
   :if (display-graphic-p)
   :config
   (nerd-icons-completion-mode))
+
+(use-package all-the-icons
+  :if (display-graphic-p))
 
 (use-package ligature
   :config
@@ -630,17 +633,137 @@ capture was not aborted."
                (when (equal org-state "DONE")
                  (my/org-roam-copy-todo-to-today))))
 
-;; Function to be run when org-agenda is opened
-(defun org-agenda-open-hook ()
-  "Hook to be run when org-agenda is opened"
-  (olivetti-mode))
+;;Function to center or shrink the agenda.
+(defun org-agenda-center ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
+    (when (eq this-command 'org-agenda)
+      ;; Activate olivetti-mode when 'c' is pressed
+      (define-key org-agenda-mode-map "c"
+        (lambda ()
+          (interactive)
+          (if (not olivetti-mode)
+              (olivetti-mode 1)
+	    ;;if Olivetti il already active, then shrink the width at x
+            (olivetti-set-width 130)))))))
 
 ;; Adds hook to org agenda mode, making follow mode active in org agenda
-(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook)
+(add-hook 'org-agenda-mode-hook 'org-agenda-center)
+
+;; Function to decenter the agenda.
+(defun org-agenda-decenter ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
+    (when (eq this-command 'org-agenda)
+      ;; Activate olivetti-mode when 'd' is pressed
+      (define-key org-agenda-mode-map "d"
+		  (lambda ()
+		    (interactive)
+		    (if (olivetti-mode)
+		    (olivetti-mode 0)))))))
+
+;; Add hook to org-agenda-mode, activate olivetti-mode only when org-agenda function is called and 'd' is pressed
+(add-hook 'org-agenda-mode-hook 'org-agenda-decenter)
+
+;;Center directly the agenda if it is open with the 'org-agenda-list' function
+(defun org-agenda-open-hook-2 ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Check if org-agenda-list function was called to open the buffer
+    (when (eq this-command 'org-agenda-list)
+      ;; Activate olivetti-mode only when org-agenda-list is called
+      (olivetti-mode 1))))
+
+;; Ajoute le hook à org-agenda-mode, ne faisant activer le mode olivetti que lorsque org-agenda-list est appelée
+(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook-2)
+
+;; Define keybind to open fast the agenda
+(global-set-key (kbd "C-c n n a") 'org-agenda-list)
+(global-set-key (kbd "C-c n n t") 'org-todo-list)
 
 ;; Only show one day of the agenda at a time
 (setq org-agenda-span 1
       org-agenda-start-day "+0d")
+
+;; Hide duplicates of the same todo item
+;; If it has more than one of timestamp, scheduled,
+;; or deadline information
+(setq org-agenda-skip-timestamp-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-scheduled-if-deadline-is-shown t
+      org-agenda-skip-timestamp-if-deadline-is-shown t)
+
+;; Ricing org agenda
+(setq org-agenda-current-time-string "")
+(setq org-agenda-time-grid '((daily) () "     " ""))
+
+(setq org-agenda-hide-tags-regexp ".*")
+
+(setq org-agenda-prefix-format '(
+(agenda . "  %?-2i %t %s ")
+ (todo . " %i %-12:c")
+ (tags . " %i %-12:c")
+ (search . " %i %-12:c")))
+
+(setq org-agenda-category-icon-alist
+      `(("Teaching.p" ,(list (all-the-icons-faicon "graduation-cap" :height 0.8)) nil nil :ascent center)
+        ("Vie" ,(list (all-the-icons-faicon "home" :v-adjust 0.005)) nil nil :ascent center)
+        ("Producer.p" ,(list (all-the-icons-faicon "youtube-play" :height 0.9)) nil nil :ascent center)
+        ("Bard.p" ,(list (all-the-icons-faicon "music" :height 0.9)) nil nil :ascent center)
+        ("Stories.s" ,(list (all-the-icons-faicon "book" :height 0.9)) nil nil :ascent center)
+        ("Author.p" ,(list (all-the-icons-faicon "pencil" :height 0.9)) nil nil :ascent center)
+        ("Gamedev.s" ,(list (all-the-icons-faicon "gamepad" :height 0.9)) nil nil :ascent center)
+        ("Knowledge.p" ,(list (all-the-icons-faicon "database" :height 0.8)) nil nil :ascent center)
+        ("Personal.p" ,(list (all-the-icons-material "person" :height 0.9)) nil nil :ascent center)
+	("Haute Couture" ,(list (nerd-icons-faicon "nf-fa-cut" :height 0.9)) nil nil :ascent center)
+))
+
+;; Load org-super-agenda
+(require 'org-super-agenda)
+(org-super-agenda-mode t)
+
+(setq org-super-agenda-groups
+       '(;; Each group has an implicit boolean OR operator between its selectors.
+
+         ;; This is the first filter, anything found here
+         ;; will be placed in this group
+         ;; even if it matches following groups
+         (:name "Overdue" ; Name
+                :scheduled past ; Filter criteria
+                :order 2 ; Order it should appear in agenda view
+                :face 'error) ; Font face used for text
+
+	 (:name "Deadline"
+		:deadline t
+		:order 1)
+
+         ;; This is the second filter, anything not found
+         ;; from the first filter, but found here,
+         ;; will be placed in this group
+         ;; even if it matches following groups
+         (:name "Personal" ; Name
+                :tag "life" ; Filter criteria
+                :order 3 ; Order it should appear in the agenda view
+                :face 'error) ; Font faced used for text
+
+         ;; Third filter..
+         (:name "Work"  ; Name
+                :tag "haute_couture" ; Filter criteria
+                :order 3 ; Order it should appear in the agenda view
+                :face '(:background "white" :underline t)) ; Font face used for text
+
+         ;; Fourth filter..
+         (:name "Today "  ; Optionally specify section name
+                :time-grid t ; Use the time grid
+                :date today ; Filter criteria
+                :scheduled today ; Another filter criteria
+                :order 1 ; Order it should appear in the agenda view
+                :face 'warning) ; Font face used for text
+        )
+)
 
 (defun my-unfill-paragraph ()
   "Unfill paragraph."
