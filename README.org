@@ -4,6 +4,12 @@
 #+property: header-args:emacs-lisp :results silent :tangle init.el
 #+startup: overview nolatexpreview
 
+* Setup variables and paths
+Set up environment variables PATH into the R bin folder.
+
+Set up the environment PATH into the texlive bin/windows folder
+
+Check in the Org-roam part for the path to the org-roam folder and the path and codes for the Templates. 
 * Preliminaries
 
 #+begin_src emacs-lisp
