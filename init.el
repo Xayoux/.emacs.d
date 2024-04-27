@@ -920,6 +920,17 @@ capture was not aborted."
   :defer t
   :after ess)
 
+(use-package smartparens-config
+  :ensure smartparens
+  :init
+  (progn
+    (add-hook 'prog-mode-hook 'smartparens-mode)
+    (add-hook 'markdown-mode-hook 'smartparens-mode)
+    (add-hook 'yaml-mode-hook 'smartparens-mode)
+    (add-hook 'org-mode-hook 'smartparens-mode)
+    (add-hook 'latex-mode-hook 'smartparens-mode))
+  :config (progn (show-smartparens-global-mode t)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
