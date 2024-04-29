@@ -629,7 +629,7 @@ capture was not aborted."
   (let ((org-refile-keep t) ;; Set this to nil to delete the original!
         (org-roam-dailies-capture-templates
           '(("t" "tasks" entry "%?"
-             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily" ("Tasks")))))
         (org-after-refile-insert-hook #'save-buffer)
         today-file
         pos)
@@ -730,6 +730,7 @@ capture was not aborted."
 	("Econométrie" ,(list (nerd-icons-faicon "nf-fa-chart_line" :height 0.9)) nil nil :ascent center)
 	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
 	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
+	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
 	)
       )
 
@@ -769,15 +770,14 @@ capture was not aborted."
                 :order 4 ; Order it should appear in the agenda view
                 ) ; Font faced used for text
 
-	 (:name "Savoir"
-		:tag "savoir"
-		:order 3)
-
-         ;; Third filter..
          (:name "Travail"  ; Name
                 :tag "work" ; Filter criteria
                 :order 3 ; Order it should appear in the agenda view
-                :face '(:background "white" :underline t)) ; Font face used for text
+                :face '(:background "white")) ; Font face used for text
+
+	 (:name "Savoir"
+		:tag "savoir"
+		:order 3)
 
          ;; Fourth filter..
          (:name "Autre"  ; Optionally specify section name
