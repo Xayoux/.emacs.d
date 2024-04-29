@@ -149,6 +149,21 @@
 (setq user-full-name "Romain Capliez"
       user-mail-address "romain.capliez01@gmail.com")
 
+(use-package pdf-tools
+  :init
+  (pdf-tools-install)  ; Standard activation command
+  (pdf-loader-install) ; On demand loading, leads to faster startup time
+  :config
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+	TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+	TeX-source-correlate-start-server t)
+  (add-hook 'TeX-after-compilation-finished-functions
+	    #'TeX-revert-document-buffer)
+  :bind (:map pdf-view-mode-map
+	      ("C-s" . isearch-forward)))
+
+(global-set-key (kbd "C-c n s") 'pdf-annot-add-highlight-markup-annotation)
+
 (use-package company
   :init
   (add-hook 'after-init-hook 'global-company-mode)
@@ -709,17 +724,14 @@ capture was not aborted."
  (search . " %i %-12:c")))
 
 (setq org-agenda-category-icon-alist
-      `(("Teaching.p" ,(list (all-the-icons-faicon "graduation-cap" :height 0.8)) nil nil :ascent center)
+      `(
         ("Vie" ,(list (all-the-icons-faicon "home" :v-adjust 0.005)) nil nil :ascent center)
-        ("Producer.p" ,(list (all-the-icons-faicon "youtube-play" :height 0.9)) nil nil :ascent center)
-        ("Bard.p" ,(list (all-the-icons-faicon "music" :height 0.9)) nil nil :ascent center)
-        ("Stories.s" ,(list (all-the-icons-faicon "book" :height 0.9)) nil nil :ascent center)
-        ("Author.p" ,(list (all-the-icons-faicon "pencil" :height 0.9)) nil nil :ascent center)
-        ("Gamedev.s" ,(list (all-the-icons-faicon "gamepad" :height 0.9)) nil nil :ascent center)
-        ("Knowledge.p" ,(list (all-the-icons-faicon "database" :height 0.8)) nil nil :ascent center)
-        ("Personal.p" ,(list (all-the-icons-material "person" :height 0.9)) nil nil :ascent center)
 	("Haute Couture" ,(list (nerd-icons-faicon "nf-fa-cut" :height 0.9)) nil nil :ascent center)
-))
+	("Econométrie" ,(list (nerd-icons-faicon "nf-fa-chart_line" :height 0.9)) nil nil :ascent center)
+	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
+	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
+	)
+      )
 
 ;; Load org-super-agenda
 (require 'org-super-agenda)
@@ -731,39 +743,118 @@ capture was not aborted."
          ;; This is the first filter, anything found here
          ;; will be placed in this group
          ;; even if it matches following groups
-         (:name "Overdue" ; Name
+
+	 (:name "Today"
+		:date today
+		:scheduled today
+		:order 3)
+
+	 (:name "Deadline Retard"
+		:deadline past
+		:order 1
+		:face '(error :underline t))
+
+         (:name "Retard" ; Name
                 :scheduled past ; Filter criteria
                 :order 2 ; Order it should appear in agenda view
                 :face 'error) ; Font face used for text
 
 	 (:name "Deadline"
 		:deadline t
-		:order 1)
+		:order 2
+		:face 'warning)
 
-         ;; This is the second filter, anything not found
-         ;; from the first filter, but found here,
-         ;; will be placed in this group
-         ;; even if it matches following groups
-         (:name "Personal" ; Name
+         (:name "Perso" ; Name
                 :tag "life" ; Filter criteria
-                :order 3 ; Order it should appear in the agenda view
-                :face 'error) ; Font faced used for text
+                :order 4 ; Order it should appear in the agenda view
+                ) ; Font faced used for text
+
+	 (:name "Savoir"
+		:tag "savoir"
+		:order 3)
 
          ;; Third filter..
-         (:name "Work"  ; Name
-                :tag "haute_couture" ; Filter criteria
+         (:name "Travail"  ; Name
+                :tag "work" ; Filter criteria
                 :order 3 ; Order it should appear in the agenda view
                 :face '(:background "white" :underline t)) ; Font face used for text
 
          ;; Fourth filter..
-         (:name "Today "  ; Optionally specify section name
-                :time-grid t ; Use the time grid
-                :date today ; Filter criteria
-                :scheduled today ; Another filter criteria
-                :order 1 ; Order it should appear in the agenda view
-                :face 'warning) ; Font face used for text
+         (:name "Autre"  ; Optionally specify section name
+                :order 5 ; Order it should appear in the agenda view
+                )
         )
 )
+
+;; Utilisation des packages nécessaires
+(use-package helm-bibtex)
+(use-package org-ref)
+(use-package org-roam-bibtex)
+(use-package org-noter)
+
+;; IMP: Ensure 'latexmk' installed as a system package!
+;; see also: http://www.jonathanleroux.org/bibtex-mode.html
+
+;; Fichier qui contient la bibliographie
+(setq bibtex-completion-bibliography '("~/Documents/RoamNotes/references/master.bib"))  ; location of .bib file containing bibliography entries
+(setq bibtex-completion-find-additional-pdfs t)                          ; support for multiple pdfs for one %citekey
+(setq bibtex-completion-pdf-field "File")                                ; in bib entry, file = {/path/to/file.pdf} could be set to locate the accompanying file
+(setq bibtex-completion-library-path '("~/Documents/RoamNotes/references/documents/"))  ; in this dir, %citekey-name(s).pdf would automatically attach pdf(s) to %citekey
+(setq bibtex-completion-notes-path "~/Documents/RoamNotes/references/notes/")           ; dir to keep notes for the pdfs
+
+;; BEGIN: Change insert citation (<f3>) behaviour of helm-bibtex for org-mode 
+(defun custom/bibtex-completion-format-citation-org (keys)
+  "Custom cite definition for org-mode"
+  (s-join ", "
+	  (--map (format "cite:&%s" it) keys)))
+
+(setq bibtex-completion-format-citation-functions
+      '((org-mode      . custom/bibtex-completion-format-citation-org)
+	(latex-mode    . bibtex-completion-format-citation-cite)
+	(markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+	(python-mode   . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(rst-mode      . bibtex-completion-format-citation-sphinxcontrib-bibtex)
+	(default       . bibtex-completion-format-citation-default))
+      )
+;; END: Change insert citation (<f3>) behaviour of helm-bibtex for org-mode
+
+(setq bibtex-autokey-year-length 4                          ; customisations for 'bibtex-generate-autokey'
+      bibtex-autokey-name-year-separator "-"                ; press C-c C-c (bibtex-clean-entry) on a bib entry w/o %citekey
+      bibtex-autokey-year-title-separator "-"               ; to automatically insert a %citekey based on meta data
+      bibtex-autokey-titleword-separator "-"                ; use M-x crossref-add-bibtex-entry <ret>: to add an entry from
+      bibtex-autokey-titlewords 2                           ; https://www.crossref.org/
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
+
+
+;(setq bibtex-completion-edit-notes-function 'bibtex-completion-edit-notes-default) ; default to org-ref for notes
+(setq bibtex-completion-edit-notes-function 'orb-bibtex-completion-edit-note) ; use org-roam-capture-templates for notes
+
+
+(setq org-noter-notes-search-path '("~/Documents/RoamNotes/references/notes/")) ; V IMPORTANT: SET FULL PATH!
+
+(setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file") ; customisation for notes, org-noter integration
+      orb-process-file-keyword t
+      orb-attached-file-extensions '("pdf"))
+
+(setq org-roam-capture-templates                    ; Org-roam capture templates
+      '(
+	("d" "default" plain
+	 "%?"
+	 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			    "#+title: ${title}\n#+filetags: :article:")
+	 :empty-lines 1
+	 :unnarrowed t)
+	("b" "bibliography notes" plain             ; Org-noter integration
+	 (file "~/Documents/RoamNotes/Templates/article-template.org")
+	 :target (file+head "references/notes/${citekey}.org"
+			    "#+title: ${citekey}\n")
+	 :empty-lines 1)
+	)
+      )
+
+;; Keybind pour affficher l'interface helm-bibtex
+(global-set-key (kbd "C-c n b") 'helm-bibtex) ; keybinding
 
 (defun my-unfill-paragraph ()
   "Unfill paragraph."
