@@ -709,7 +709,7 @@ capture was not aborted."
       (add-to-list 'org-agenda-files (buffer-file-name)))))
 #+end_src
 
-Find and open or create "Projects" nodes.
+Find and open or create "Project" nodes.
 #+begin_src emacs-lisp
 (defun my/org-roam-find-project ()
   (interactive)
@@ -723,7 +723,7 @@ Find and open or create "Projects" nodes.
    (my/org-roam-filter-by-tag "Project")
    nil
    :templates
-   '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+   '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
       :unnarrowed t))))
 #+end_src
