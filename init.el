@@ -732,6 +732,7 @@ capture was not aborted."
 	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
 	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
 	("Economie mondiale" ,(list (nerd-icons-mdicon "nf-md-earth" :height 0.9)) nil nil :ascent center)
+	("Théâtre" ,(list (nerd-icons-faicon "nf-fa-masks_theater" :height 0.9)) nil nil :ascent center)
 	)
       )
 
