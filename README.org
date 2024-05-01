@@ -598,9 +598,9 @@ For a modern-looking =org-mode=, use =org-modern=.
 =org-fragtog= for an automatic toggling of LaTeX fragments.
 
 #+begin_src emacs-lisp
-;;(use-package org-fragtog
-  ;;:hook
-  ;;(org-mode . org-fragtog-mode))
+(use-package org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
 #+end_src
 *** Orga-roam
 **** Basic configuration

@@ -478,9 +478,9 @@ textsc" "textup"))))
   (org-cite-global-bibliography
    (list (substitute-in-file-name "${BIBINPUTS}/References.bib"))))
 
-;;(use-package org-fragtog
-  ;;:hook
-  ;;(org-mode . org-fragtog-mode))
+(use-package org-fragtog
+  :hook
+  (org-mode . org-fragtog-mode))
 
 (use-package org-roam
   :ensure t
