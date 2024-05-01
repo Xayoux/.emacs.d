@@ -198,7 +198,6 @@ all-the-icons
     (mapcar #'disable-theme custom-enabled-themes)
     (load-theme 'doom-one t)))
 #+end_src
-
 * Other Emacs settings and tools
 ** Encoding
 
@@ -920,6 +919,7 @@ Set-up les icones pour les différentes catégories de Projects
 	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
 	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
 	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
+	("Economie mondiale" ,(list (nerd-icons-mdicon "nf-md-earth" :height 0.9)) nil nil :ascent center)
 	)
       )
 #+end_src

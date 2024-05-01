@@ -731,6 +731,7 @@ capture was not aborted."
 	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
 	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
 	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
+	("Economie mondiale" ,(list (nerd-icons-mdicon "nf-md-earth" :height 0.9)) nil nil :ascent center)
 	)
       )
 
