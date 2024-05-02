@@ -839,21 +839,21 @@ capture was not aborted."
       orb-process-file-keyword t
       orb-attached-file-extensions '("pdf"))
 
-(setq org-roam-capture-templates                    ; Org-roam capture templates
-      '(
-	("d" "default" plain
-	 "%?"
-	 :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			    "#+title: ${title}\n#+filetags: :article:")
-	 :empty-lines 1
-	 :unnarrowed t)
-	("b" "bibliography notes" plain             ; Org-noter integration
-	 (file "~/Documents/RoamNotes/Templates/article-template.org")
-	 :target (file+head "references/notes/${citekey}.org"
-			    "#+title: ${citekey}\n")
-	 :empty-lines 1)
-	)
-      )
+;(setq org-roam-capture-templates                    ; Org-roam capture templates
+ ;     '(
+	;("d" "default" plain
+	 ;"%?"
+	 ;:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+	;		    "#+title: ${title}\n#+filetags: :article:")
+	; :empty-lines 1
+;	 :unnarrowed t)
+;	("b" "bibliography notes" plain             ; Org-noter integration
+ ; (file "~/Documents/RoamNotes/Templates/article-template.org")
+	; :target (file+head "references/notes/${citekey}.org"
+	;		    "#+title: ${citekey}\n")
+	 ;:empty-lines 1)
+	;)
+   ;   )
 
 ;; Keybind pour affficher l'interface helm-bibtex
 (global-set-key (kbd "C-c n b") 'helm-bibtex) ; keybinding
