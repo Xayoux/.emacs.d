@@ -482,6 +482,20 @@ textsc" "textup"))))
   :hook
   (org-mode . org-fragtog-mode))
 
+(setq org-modern-priority-faces
+       (quote (
+	       (?A :background "red"
+                   :foreground "white")
+	       (?B :background "orange"
+		         :foreground "white")
+	       (?C :background "aquamarine2"
+		         :foreground "white")
+	       (?D :background "lightskyblue"
+		         :foreground "white")
+	       )
+	      )
+       )
+
 (use-package org-roam
   :ensure t
   :demand t
@@ -719,9 +733,9 @@ capture was not aborted."
 
 (setq org-agenda-prefix-format '(
 (agenda . "  %?-2i %t %s ")
- (todo . "%s %i %-12:c")
- (tags . " %i %-12:c")
- (search . " %i %-12:c")))
+ (todo . " %i %-15:c")
+ (tags . " %i %-15:c")
+ (search . " %i %-15:c")))
 
 (setq org-agenda-category-icon-alist
       `(
