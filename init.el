@@ -507,13 +507,13 @@ textsc" "textup"))))
   (org-roam-completion-everywhere t)
   (org-roam-capture-templates
    '(
-      ("a" "article" plain
-      (file "~/Documents/RoamNotes/Templates/article-template.org")
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
      ("d" "default" plain
       "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+      ("a" "article" plain
+      (file "~/Documents/RoamNotes/Templates/article-template.org")
+      :if-new (file+head "references/notes/${citekey}.org" "#+title: ${citekey}\n")
       :unnarrowed t)
      ("c" "code commandes" plain
       (file "~/Documents/RoamNotes/Templates/code-commandes-template.org")
@@ -537,6 +537,7 @@ textsc" "textup"))))
 	 ("C-c n I" . org-roam-node-insert-immediate)
          ("C-c n p" . my/org-roam-find-project)
 	 ("C-c n a" . my/org-roam-find-article)
+	 ("C-c n S" . my/org-roam-find-slipbox)
          ("C-c n T" . my/org-roam-capture-task)
          ("C-c n b" . my/org-roam-capture-inbox)
          :map org-mode-map
@@ -602,6 +603,22 @@ capture was not aborted."
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
       :unnarrowed t))))
 
+(defun my/org-roam-find-slipbox ()
+  (interactive)
+  ;; Add the project file to the agenda after capture is finished
+  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Select a project file to open, creating it if necessary
+  (org-roam-node-find
+   nil
+   nil
+   (my/org-roam-filter-by-tag "Slip_box")
+   nil
+   :templates
+   '(("S" "slip_box" plain ""
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Slip_box\n* Note\n\n*Note précédente :* \n\n\n\n*Note suivante :* ")
+      :unnarrowed t))))
+
 (defun my/org-roam-find-article ()
   (interactive)
   ;; Add the project file to the agenda after capture is finished
@@ -638,29 +655,36 @@ capture was not aborted."
                                                           "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
                                                           ("Tasks"))))))
 
-(defun my/org-roam-copy-todo-to-today ()
-  (interactive)
-  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
-        (org-roam-dailies-capture-templates
-          '(("t" "tasks" entry "%?"
-             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily" ("Tasks")))))
-        (org-after-refile-insert-hook #'save-buffer)
-        today-file
-        pos)
-    (save-window-excursion
-      (org-roam-dailies--capture (current-time) t)
-      (setq today-file (buffer-file-name))
-      (setq pos (point)))
+;;(defun my/org-roam-copy-todo-to-today ()
+ ;; (interactive)
+ ;; (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+   ;;     (org-roam-dailies-capture-templates
+  ;;        '(("t" "tasks" entry "%?"
+  ;;           :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: daily" ("Tasks")))))
+   ;;     (org-after-refile-insert-hook #'save-buffer)
+   ;;     today-file
+   ;;     pos)
+   ;; (save-window-excursion
+   ;;   (org-roam-dailies--capture (current-time) t)
+   ;;   (setq today-file (buffer-file-name))
+   ;;   (setq pos (point)))
 
     ;; Only refile if the target file is different than the current file
-    (unless (equal (file-truename today-file)
-                   (file-truename (buffer-file-name)))
-      (org-refile nil nil (list "Tasks" today-file nil pos)))))
+  ;;  (unless (equal (file-truename today-file)
+      ;;             (file-truename (buffer-file-name)))
+    ;;  (org-refile nil nil (list "Tasks" today-file nil pos)))))
+;;
+;;(add-to-list 'org-after-todo-state-change-hook
+   ;;          (lambda ()
+    ;;           (when (equal org-state "DONE")
+      ;;           (my/org-roam-copy-todo-to-today))))
 
-(add-to-list 'org-after-todo-state-change-hook
-             (lambda ()
-               (when (equal org-state "DONE")
-                 (my/org-roam-copy-todo-to-today))))
+(defun remove-priority-on-done ()
+  "Remove priority when TODO item is marked as DONE."
+  (when (string= org-state "DONE")
+    (org-priority ?\s)))
+
+(add-hook 'org-after-todo-state-change-hook 'remove-priority-on-done)
 
 ;;Function to center or shrink the agenda.
 (defun org-agenda-center ()
@@ -913,7 +937,8 @@ capture was not aborted."
   :bind ("C-c v" . my-visual-fill)
   :hook
   (bibtex-mode   . my-visual-fill)
-  (text-mode     . my-visual-fill))
+  (text-mode     . my-visual-fill)
+  (org-roam-mode . my-visual-fill))
 
 (use-package yasnippet
   :custom
