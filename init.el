@@ -938,7 +938,9 @@ capture was not aborted."
   :hook
   (bibtex-mode   . my-visual-fill)
   (text-mode     . my-visual-fill)
-  (org-roam-mode . my-visual-fill))
+  (org-roam-mode . my-visual-fill)
+  (Magit-mode    . my-visual-fill)
+  )
 
 (use-package yasnippet
   :custom
