@@ -615,8 +615,8 @@ capture was not aborted."
    (my/org-roam-filter-by-tag "Slip_box")
    nil
    :templates
-   '(("S" "slip_box" plain ""
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Slip_box\n* Note\n\n*Note précédente :* \n\n\n\n*Note suivante :* ")
+   '(("S" "Slip_box" plain ""
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Slip_box\n* Note\n\n\n*Note précédente :* \n\n*Note suivante :* \n\n*Notes liées :* ")
       :unnarrowed t))))
 
 (defun my/org-roam-find-article ()
