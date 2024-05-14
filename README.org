@@ -1152,7 +1152,8 @@ Use =visual-fill-column= for text modes
   (bibtex-mode   . my-visual-fill)
   (text-mode     . my-visual-fill)
   (org-roam-mode . my-visual-fill)
-  (Magit-mode    . my-visual-fill)
+  (magit-mode    . my-visual-fill)
+  (org-agenda-mode . my-visual-fill)
   )
 #+end_src
 

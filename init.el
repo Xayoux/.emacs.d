@@ -939,7 +939,8 @@ capture was not aborted."
   (bibtex-mode   . my-visual-fill)
   (text-mode     . my-visual-fill)
   (org-roam-mode . my-visual-fill)
-  (Magit-mode    . my-visual-fill)
+  (magit-mode    . my-visual-fill)
+  (org-agenda-mode . my-visual-fill)
   )
 
 (use-package yasnippet
