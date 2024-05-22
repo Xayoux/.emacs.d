@@ -845,6 +845,15 @@ Enlever l'ordre de priorité lorsqu'une TODO passe sur DONE
 
 #+end_src
 
+**** Org-roam UI
+#+begin_src emacs-lisp
+(use-package org-roam-ui
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+end_src
 *** Org-agenda
 Les codes pour cette section proviennent pour la plupart de [[https://www.youtube.com/watch?v=a_WNtuefREM][Making org agenda look beautiful]] (voir le [[https://librephoenix.com/2023-12-30-making-org-agenda-look-beautiful][blog]] pour les codes).
 **** Centrage de l'agenda

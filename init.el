@@ -686,6 +686,13 @@ capture was not aborted."
 
 (add-hook 'org-after-todo-state-change-hook 'remove-priority-on-done)
 
+(use-package org-roam-ui
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
 ;;Function to center or shrink the agenda.
 (defun org-agenda-center ()
   ;; Check if the current buffer is an org-agenda buffer
