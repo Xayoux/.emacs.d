@@ -964,6 +964,7 @@ capture was not aborted."
 (use-package ess
   :init
   (require 'ess-site)
+  :mode ("renv.lock" . js-json-mode)
   :bind (:map ess-r-mode-map
 	      ;; Shortcut for pipe |>
         ("C-S-m"   . " |>")
@@ -1038,19 +1039,22 @@ capture was not aborted."
       (my-run-rscript filename (file-name-base filename))))
 
   (defun my-inferior-ess-init ()
-    "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
+   "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
     (add-hook 'comint-preoutput-filter-functions #'xterm-color-filter -90 t)
     (setq-local ansi-color-for-comint-mode nil)
     (smartparens-mode 1))
+
+  (defun my-ess-remove-project-hook ()
+    "Remove a useless hook added by ess to use its own project functions"
+    (make-local-variable 'project-find-functions)
+    (setq project-find-functions '(project-try-vc)))
   :hook
   (inferior-ess-mode . my-inferior-ess-init)
-  ;; Remove a useless hook added by ess to use its own project functions
-  (ess-r-mode . (lambda()
-		  (make-local-variable 'project-find-functions)
-		  (setq project-find-functions '(project-projectile project-try-vc))))
+  (inferior-ess-mode . my-ess-remove-project-hook)
+  (ess-r-mode . my-ess-remove-project-hook)
   ;; Outlining like in RStudio
   (ess-r-mode . (lambda ()
-    (setq outline-regexp "^#+ +.*----")
+    (setq outline-regexp "^#+ +.*\\(----\\|====\\|####\\)")
     (defun outline-level ()
            (cond ((looking-at "^# ") 1)
              ((looking-at "^## ") 2)
