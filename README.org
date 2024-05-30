@@ -1314,12 +1314,12 @@ The directory containing the R binary must be in your PATH environment variable.
   (ess-r-mode . my-ess-remove-project-hook)
   ;; Outlining like in RStudio
   (ess-r-mode . (lambda ()
-    (setq outline-regexp "^#+ +.*\\(----\\|====\\|####\\)")
+    (setq outline-regexp "^[[:space:]]*#+ +.*\\(----\\|====\\|####\\)")
     (defun outline-level ()
-           (cond ((looking-at "^# ") 1)
-             ((looking-at "^## ") 2)
-             ((looking-at "^### ") 3)
-             ((looking-at "^#### ") 4)
+           (cond ((looking-at "^[[:space:]]*# ") 1)
+             ((looking-at "^[[:space:]]*## ") 2)
+             ((looking-at "^[[:space:]]*### ") 3)
+             ((looking-at "^[[:space:]]*#### ") 4)
              (t 1000))))))
 #+end_src
 
