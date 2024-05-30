@@ -21,6 +21,12 @@
   ;; Always download packages if not available
   (use-package-always-ensure t))
 
+(use-package quelpa
+  :custom
+  (quelpa-update-melpa-p nil)) ; Prevent update at all startup
+
+(use-package quelpa-use-package)
+
 (setq blink-cursor-blinks 0 ; curseur clignote indéfiniment
       custom-safe-themes t ; consider all themes as safe
       display-time-24hr-format t ; Affichage de l'heure format 24h
@@ -111,6 +117,8 @@
   (rainbow-delimiters-depth-8-face ((t (:foreground "black"))))
   (rainbow-delimiters-unmatched-face ((t (:background "yellow")))))
 
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+
 (use-package doom-themes
   :if (display-graphic-p)
   :custom
@@ -163,6 +171,28 @@
 	      ("C-s" . isearch-forward)))
 
 (global-set-key (kbd "C-c n s") 'pdf-annot-add-highlight-markup-annotation)
+
+(use-package outline
+  :ensure nil
+  :custom
+
+  (outline-minor-mode-use-buttons 'in-margins) ; add in-margin buttons to fold/unfold
+  :config
+  (unbind-key "RET" outline-overlay-button-map)
+  :hook
+  (text-mode . outline-minor-mode)
+  (prog-mode . outline-minor-mode))
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+
+(use-package outline-minor-faces
+  :after outline
+  :hook
+  (outline-minor-mode . outline-minor-faces-mode))
 
 (use-package company
   :init
@@ -227,6 +257,11 @@
 		    company-math-symbols-unicode
 		    company-latex-commands))
        company-backends))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode)
+  :custom
+  (company-box-doc-enable nil))
 
 (use-package counsel
   :config
@@ -1038,28 +1073,28 @@ capture was not aborted."
     (let ((filename (read-file-name "R script: ")))
       (my-run-rscript filename (file-name-base filename))))
 
-  (defun my-inferior-ess-init ()
-   "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
-    (add-hook 'comint-preoutput-filter-functions #'xterm-color-filter -90 t)
-    (setq-local ansi-color-for-comint-mode nil)
-    (smartparens-mode 1))
+  ;(defun my-inferior-ess-init ()
+  ; "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
+  ;  (add-hook 'comint-preoutput-filter-functions #'xterm-color-filter -90 t)
+  ;  (setq-local ansi-color-for-comint-mode nil)
+  ;  (smartparens-mode 1))
 
   (defun my-ess-remove-project-hook ()
     "Remove a useless hook added by ess to use its own project functions"
     (make-local-variable 'project-find-functions)
     (setq project-find-functions '(project-try-vc)))
   :hook
-  (inferior-ess-mode . my-inferior-ess-init)
+  ;(inferior-ess-mode . my-inferior-ess-init)
   (inferior-ess-mode . my-ess-remove-project-hook)
   (ess-r-mode . my-ess-remove-project-hook)
   ;; Outlining like in RStudio
   (ess-r-mode . (lambda ()
-    (setq outline-regexp "^#+ +.*\\(----\\|====\\|####\\)")
+    (setq outline-regexp "^[[:space:]]*#+ +.*\\(----\\|====\\|####\\)")
     (defun outline-level ()
-           (cond ((looking-at "^# ") 1)
-             ((looking-at "^## ") 2)
-             ((looking-at "^### ") 3)
-             ((looking-at "^#### ") 4)
+           (cond ((looking-at "^[[:space:]]*# ") 1)
+             ((looking-at "^[[:space:]]*## ") 2)
+             ((looking-at "^[[:space:]]*### ") 3)
+             ((looking-at "^[[:space:]]*#### ") 4)
              (t 1000))))))
 
 (use-package rutils
