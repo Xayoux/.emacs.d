@@ -173,6 +173,10 @@ all-the-icons
   (rainbow-delimiters-unmatched-face ((t (:background "yellow")))))
 #+end_src
 
+** Indent
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+#+end_src
 ** Theme
 #+begin_src emacs-lisp
 (use-package doom-themes
