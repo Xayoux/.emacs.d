@@ -244,7 +244,36 @@ Keybind pour surligner des passages dans un pdf (une note peut ête ajouter dans
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c n s") 'pdf-annot-add-highlight-markup-annotation)
 #+end_src
+** Outline minor mode
+#+begin_src emacs-lisp
+(use-package outline
+  :ensure nil
+  :custom
 
+  (outline-minor-mode-use-buttons 'in-margins) ; add in-margin buttons to fold/unfold
+  :config
+  (unbind-key "RET" outline-overlay-button-map)
+  :hook
+  (text-mode . outline-minor-mode)
+  (prog-mode . outline-minor-mode))
+#+end_src
+
+Use =bicycle= to easily cyce visibility in outline minor mode (à la =orgmode=)
+#+begin_src emacs-lisp
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+#+end_src
+
+Use =outline-minor-faces= to use a special face ofr outline sections.
+#+begin_src emacs-lisp
+(use-package outline-minor-faces
+  :after outline
+  :hook
+  (outline-minor-mode . outline-minor-faces-mode))
+#+end_src
 * Auto-completion
 ** Company
 #+begin_src emacs-lisp
