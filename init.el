@@ -21,12 +21,6 @@
   ;; Always download packages if not available
   (use-package-always-ensure t))
 
-(use-package quelpa
-  :custom
-  (quelpa-update-melpa-p nil)) ; Prevent update at all startup
-
-(use-package quelpa-use-package)
-
 (setq blink-cursor-blinks 0 ; curseur clignote indéfiniment
       custom-safe-themes t ; consider all themes as safe
       display-time-24hr-format t ; Affichage de l'heure format 24h
@@ -257,11 +251,6 @@
 		    company-math-symbols-unicode
 		    company-latex-commands))
        company-backends))
-
-(use-package company-box
-  :hook (company-mode . company-box-mode)
-  :custom
-  (company-box-doc-enable nil))
 
 (use-package counsel
   :config
@@ -1073,18 +1062,18 @@ capture was not aborted."
     (let ((filename (read-file-name "R script: ")))
       (my-run-rscript filename (file-name-base filename))))
 
-  ;(defun my-inferior-ess-init ()
-  ; "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
-  ;  (add-hook 'comint-preoutput-filter-functions #'xterm-color-filter -90 t)
-  ;  (setq-local ansi-color-for-comint-mode nil)
-  ;  (smartparens-mode 1))
+  (defun my-inferior-ess-init ()
+  "Workaround for https://github.com/emacs-ess/ESS/issues/1193"
+   (add-hook 'comint-preoutput-filter-functions #'xterm-color-filter -90 t)
+   (setq-local ansi-color-for-comint-mode nil)
+   (smartparens-mode 1))
 
   (defun my-ess-remove-project-hook ()
     "Remove a useless hook added by ess to use its own project functions"
     (make-local-variable 'project-find-functions)
     (setq project-find-functions '(project-try-vc)))
   :hook
-  ;(inferior-ess-mode . my-inferior-ess-init)
+  (inferior-ess-mode . my-inferior-ess-init)
   (inferior-ess-mode . my-ess-remove-project-hook)
   (ess-r-mode . my-ess-remove-project-hook)
   ;; Outlining like in RStudio

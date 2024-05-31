@@ -34,7 +34,20 @@
  '(org-priority-lowest 68)
  '(org-return-follows-link t)
  '(package-selected-packages
-   '(indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline)))
+   '(indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
+ '(safe-local-variable-values
+   '((eval add-hook 'after-save-hook
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Tangle?")
+		 (org-babel-tangle)))
+	   nil t)
+     (eval add-hook 'after-save-hook
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Reload?")
+		 (load-file user-init-file)))
+	   nil t))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
