@@ -34,7 +34,7 @@
   (global-hl-line-mode +1) ; Highlight the current line
   ;; Fonts and unicode characters
   (add-to-list 'default-frame-alist
-	       '(font . "JetBrainsMono"))
+	       '(font . "JetBrains Mono"))
   (set-fontset-font t 'unicode (font-spec :name "XITS Math") nil 'prepend)
   (add-hook 'text-mode-hook 'prettify-symbols-mode))
 (add-hook 'prog-mode-hook (lambda ()
