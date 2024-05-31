@@ -24,6 +24,25 @@ Pour avoir un apperçu des icons possibles et leurs noms, aller sur la [[https:/
 
 ** Prérequis pour pdf-tools
 Lors de l'installation de pdf-tools, suivre ce [[https://github.com/nobiot/Zero-to-Emacs-and-Org-roam/blob/v1/100.pdf-tools-org-noter.md][guide]] pour télécharger et installer [[https://www.msys2.org/][msys2]].
+
+** Requis pour R
+Installer le package =languageserver= pour pouvoir utiliser la complétion =eglot=
+#+begin_src R :noeval
+install.packages("languageserver")
+#+end_src
+
+Configurer le =.Rprofile= pour load =devtools= dès le démmarage
+#+begin_src R :noeval
+if (interactive()) {
+  suppressMessages(require(devtools))
+}
+#+end_src
+
+Configurer le =.Rprofile= pour afficher l'aide dans emacs et définir le miroire de téléchargement des packages.
+#+begin_src R :noeval
+options(help_type="text",repos=c(CRAN="https://cran.r-project.org"))
+#+end_src
+
 * Preliminaries
 
 #+begin_src emacs-lisp
