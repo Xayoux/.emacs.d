@@ -112,6 +112,11 @@
   (rainbow-delimiters-unmatched-face ((t (:background "yellow")))))
 
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-auto-character-face-perc 100)
+(setq highlight-indent-guides-auto-even-face-perc 10)
+(setq highlight-indent-guides-auto-odd-face-perc 10)
+(setq highlight-indent-guides-auto-enabled t)
+(setq highlight-indent-guides-method 'bitmap)
 
 (use-package doom-themes
   :if (display-graphic-p)

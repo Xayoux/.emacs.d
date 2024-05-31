@@ -18,11 +18,6 @@
      (ess-fl-keyword:=)
      (ess-R-fl-keyword:F&T)))
  '(global-org-modern-mode t)
- '(highlight-indent-guides-auto-character-face-perc 100)
- '(highlight-indent-guides-auto-enabled t)
- '(highlight-indent-guides-auto-even-face-perc 15)
- '(highlight-indent-guides-auto-odd-face-perc 15)
- '(highlight-indent-guides-method 'bitmap)
  '(keyboard-coding-system 'utf-8)
  '(org-agenda-files
    '("d:/capliez/Documents/RoamNotes/20240423160746-haute_couture_cepii.org" "d:/capliez/Documents/RoamNotes/20240429153955-sport.org" "d:/capliez/Documents/RoamNotes/20240423191949-vie.org" "d:/capliez/Documents/RoamNotes/20240429164618-emacs_improve.org" "d:/capliez/Documents/RoamNotes/20240501165908-theatre.org" "d:/capliez/Documents/RoamNotes/20240430092556-economie_mondiale.org"))

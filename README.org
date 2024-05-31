@@ -195,6 +195,11 @@ all-the-icons
 ** Indent
 #+begin_src emacs-lisp
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-auto-character-face-perc 100)
+(setq highlight-indent-guides-auto-even-face-perc 10)
+(setq highlight-indent-guides-auto-odd-face-perc 10)
+(setq highlight-indent-guides-auto-enabled t)
+(setq highlight-indent-guides-method 'bitmap)
 #+end_src
 ** Theme
 #+begin_src emacs-lisp
