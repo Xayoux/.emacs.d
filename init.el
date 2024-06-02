@@ -111,13 +111,6 @@
   (rainbow-delimiters-depth-8-face ((t (:foreground "black"))))
   (rainbow-delimiters-unmatched-face ((t (:background "yellow")))))
 
-(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-(setq highlight-indent-guides-auto-character-face-perc 100)
-(setq highlight-indent-guides-auto-even-face-perc 10)
-(setq highlight-indent-guides-auto-odd-face-perc 10)
-(setq highlight-indent-guides-auto-enabled t)
-(setq highlight-indent-guides-method 'bitmap)
-
 (use-package doom-themes
   :if (display-graphic-p)
   :custom
@@ -154,6 +147,17 @@
   (load-theme 'modus-vivendi-deuteranopia)
   (define-key global-map (kbd "S-<f5>") #'modus-themes-toggle)
   )
+
+(use-package highlight-indent-guides)
+;; Activer les indentations dans tous les modes de programmation
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;; Enlever la couleur automatique des guides (fonctionne mal avec modus-vivdendi)
+(setq highlight-indent-guides-auto-enabled nil)
+;; Définir les guides comme étant des tirets verticaux
+(setq highlight-indent-guides-method 'character)
+(setq highlight-indent-guides-character '124)
+;; Définir la couleur des guides
+(set-face-foreground 'highlight-indent-guides-character-face "dimgray")
 
 (set-language-environment "UTF-8")
 (prefer-coding-system       'utf-8)
