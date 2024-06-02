@@ -220,6 +220,20 @@
   :custom
   (dictionary-server "dict.org"))
 
+(use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-agho --group-directories-first")
+  :hook
+  (dired-mode . (lambda ()
+		  (dired-hide-details-mode)))
+  (dired-mode . auto-revert-mode))
+
+(use-package diredfl
+  :hook
+  (dired-mode . diredfl-mode))
+
 (use-package pdf-tools
   :init
   (pdf-tools-install)  ; Standard activation command

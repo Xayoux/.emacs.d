@@ -329,6 +329,22 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
   :custom
   (dictionary-server "dict.org"))
 #+end_src
+** Dired
+#+begin_src emacs-lisp
+(use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :custom
+  (dired-listing-switches "-agho --group-directories-first")
+  :hook
+  (dired-mode . (lambda ()
+		  (dired-hide-details-mode)))
+  (dired-mode . auto-revert-mode))
+
+(use-package diredfl
+  :hook
+  (dired-mode . diredfl-mode))
+#+end_src
 ** PDF viewers
 Pdf-tools permet un meilleur affichage des PDF.
 #+begin_src emacs-lisp
