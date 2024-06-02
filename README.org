@@ -1245,6 +1245,12 @@ Use "C-TAB" for moving to next field to avoid conflict with autocompletion.
 #+end_src
 
 *** Emacs Speaks Statistics (ESS)
+Package nécessaire pour corriger le bug de la console R
+[[https://github.com/emacs-ess/ESS/issues/1193][https://github.com/emacs-ess/ESS/issues/1193]] voir réponse de Lionel le 18 mai 2022.
+#+begin_src emacs-lisp
+(use-package xterm-color)
+#+end_src
+
 The directory containing the R binary must be in your PATH environment variable.
 #+begin_src emacs-lisp
 (use-package ess
