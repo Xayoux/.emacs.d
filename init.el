@@ -188,6 +188,9 @@
 (setq user-full-name "Romain Capliez"
       user-mail-address "romain.capliez01@gmail.com")
 
+(setq initial-major-mode 'org-mode
+      initial-scratch-message nil)
+
 (setq show-paren-mode t ; coupler les parenthèses
       auth-sources '("~/.authinfo") ; Define file that stores secrets
       backup-directory-alist '(("." . "~/.emacs.d/backup"))

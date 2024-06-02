@@ -290,6 +290,12 @@ Set up encoding to Unicode
 (setq user-full-name "Romain Capliez"
       user-mail-address "romain.capliez01@gmail.com")
 #+end_src
+** Scratch buffer
+Make the scratch buffer an =org-mode= buffer and remove the scratch message
+#+begin_src emacs-lisp
+(setq initial-major-mode 'org-mode
+      initial-scratch-message nil)
+#+end_src
 ** Other emacs settings
 #+begin_src emacs-lisp
 (setq show-paren-mode t ; coupler les parenthèses
