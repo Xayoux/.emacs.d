@@ -170,6 +170,30 @@
 (setq user-full-name "Romain Capliez"
       user-mail-address "romain.capliez01@gmail.com")
 
+(setq show-paren-mode t ; coupler les parenthèses
+      auth-sources '("~/.authinfo") ; Define file that stores secrets
+      backup-directory-alist '(("." . "~/.emacs.d/backup"))
+      default-major-mode 'text-mode ; mode par défaut
+      delete-by-moving-to-trash t ; Sent deleted files to trash
+      comment-column 0 ; Prevent indentation of lines starting with one comment
+      next-line-add-newlines t
+      jit-lock-chunk-size 50000
+      ;; set large file threshold at 100 megabytes
+      large-file-warning-threshold 100000000
+      ;; Options to make lsp usable in emacs (from
+      ;; https://emacs-lsp.github.io/lsp-mode/page/performance/)
+      gc-cons-threshold (* 10 800000)
+      read-process-output-max (* 1024 1024))
+(setq-default mouse-yank-at-point t     ; coller avec la souris
+              case-fold-search t)        ; recherche sans égard à la casse
+(delete-selection-mode t)                ; entrée efface texte sélectionné
+(fset 'yes-or-no-p 'y-or-n-p)            ; Replace yes or no with y or n
+(auto-compression-mode t)
+(when (display-graphic-p)
+    (server-start))
+(when is-mswindows
+    (setq tramp-default-method "plink"))
+
 (use-package pdf-tools
   :init
   (pdf-tools-install)  ; Standard activation command
