@@ -234,6 +234,34 @@
   :hook
   (dired-mode . diredfl-mode))
 
+(use-package imenu
+  :ensure nil
+  :custom
+  (imenu-auto-rescan t))
+
+(use-package imenu-list
+  :config
+  (defun my-imenu-list-goto-entry ()
+    "Goto entry and exit imenu"
+    (interactive)
+    (imenu-list-goto-entry)
+    (imenu-list-smart-toggle))
+  :bind
+  (("C-c =" . imenu-list-smart-toggle)
+   :map imenu-list-major-mode-map
+	 ("M-<return>" . my-imenu-list-goto-entry))
+  :custom
+  (imenu-list-focus-after-activation t)
+  (imenu-list-position 'right))
+
+(use-package flimenu
+  :config
+  (flimenu-global-mode))
+
+(use-package imenu-anywhere
+  :bind
+  ("M-g M-i" . ivy-imenu-anywhere))
+
 (use-package pdf-tools
   :init
   (pdf-tools-install)  ; Standard activation command

@@ -345,6 +345,45 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
   :hook
   (dired-mode . diredfl-mode))
 #+end_src
+** Imenu
+Permet d'afficher et de naviguer au entre les fonctions et les packages dans un mode de programmation
+#+begin_src emacs-lisp
+(use-package imenu
+  :ensure nil
+  :custom
+  (imenu-auto-rescan t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package imenu-list
+  :config
+  (defun my-imenu-list-goto-entry ()
+    "Goto entry and exit imenu"
+    (interactive)
+    (imenu-list-goto-entry)
+    (imenu-list-smart-toggle))
+  :bind
+  (("C-c =" . imenu-list-smart-toggle)
+   :map imenu-list-major-mode-map
+	 ("M-<return>" . my-imenu-list-goto-entry))
+  :custom
+  (imenu-list-focus-after-activation t)
+  (imenu-list-position 'right))
+#+end_src
+
+Flatten =imenu= so that we can jump to any subheading from the main menu.
+#+begin_src emacs-lisp
+(use-package flimenu
+  :config
+  (flimenu-global-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package imenu-anywhere
+  :bind
+  ("M-g M-i" . ivy-imenu-anywhere))
+#+end_src
+
 ** PDF viewers
 Pdf-tools permet un meilleur affichage des PDF.
 #+begin_src emacs-lisp
