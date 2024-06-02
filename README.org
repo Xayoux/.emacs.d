@@ -82,6 +82,23 @@ options(help_type="text",repos=c(CRAN="https://cran.r-project.org"))
   (use-package-always-ensure t))
 #+end_src
 
+
+* Emacs startup
+#+begin_src emacs-lisp
+(use-package dashboard
+  :if (display-graphic-p)
+  :custom
+  (dashboard-projects-switch-function 'project-switch-project)
+  (dashboard-set-navigator t) ; raccourcis de rubrique
+  (dashboard-center-content t)
+  (dashboard-items '((recents   . 6)
+                     (projects  . 6)
+                     (bookmarks . 6)))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  :config
+  (dashboard-setup-startup-hook))
+#+end_src
 * Appearance
 ** Standard emacs options
 #+begin_src emacs-lisp

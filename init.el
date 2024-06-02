@@ -21,6 +21,20 @@
   ;; Always download packages if not available
   (use-package-always-ensure t))
 
+(use-package dashboard
+  :if (display-graphic-p)
+  :custom
+  (dashboard-projects-switch-function 'project-switch-project)
+  (dashboard-set-navigator t) ; raccourcis de rubrique
+  (dashboard-center-content t)
+  (dashboard-items '((recents   . 6)
+                     (projects  . 6)
+                     (bookmarks . 6)))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  :config
+  (dashboard-setup-startup-hook))
+
 (setq blink-cursor-blinks 0 ; curseur clignote indéfiniment
       custom-safe-themes t ; consider all themes as safe
       display-time-24hr-format t ; Affichage de l'heure format 24h
