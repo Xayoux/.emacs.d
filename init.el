@@ -553,7 +553,9 @@ textsc" "textup"))))
 		  (setq company-idle-delay 0.3))
   :custom
   (cdlatex-command-alist
-	'(("equ*" "Insert equation* env"   "" cdlatex-environment ("equation*") t nil)))
+   '(("equ*" "Insert equation* env"   "" cdlatex-environment ("equation*") t nil)
+     ("frd" "Insert \\frac{\\partial }{\\partial }" "\\frac{\\partial ?}{\\partial }" cdlatex-position-cursor nil nil t)
+     ("su" "Insert \\sum" "\\sum?" cdlatex-position-cursor nil nil t)))
   (cdlatex-math-symbol-prefix ?\262) ; correspond to key "²"
   :hook
   (LaTeX-mode . turn-on-cdlatex)
