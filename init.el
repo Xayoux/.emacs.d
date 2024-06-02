@@ -141,6 +141,20 @@
     (mapcar #'disable-theme custom-enabled-themes)
     (load-theme 'doom-one t)))
 
+(use-package modus-themes
+  :ensure t
+  :config
+  (setq modus-themes-italic-constructs t)
+  (setq modus-themes-bold-constructs t)
+  (setq modus-themes-to-toggle '(modus-operandi-deuteranopia modus-vivendi-deuteranopia))
+  ;; Remove the mode-line border
+  (setq modus-themes-common-palette-overrides
+   '((border-mode-line-active unspecified)
+     (border-mode-line-inactive unspecified)))
+  (load-theme 'modus-vivendi-deuteranopia)
+  (define-key global-map (kbd "S-<f5>") #'modus-themes-toggle)
+  )
+
 (set-language-environment "UTF-8")
 (prefer-coding-system       'utf-8)
 ;; (setq locale-coding-system 'utf-8) ; Mess up dired buffer under windows
@@ -989,6 +1003,8 @@ capture was not aborted."
   :bind (:map yas-minor-mode-map
 	      ("M-C-TAB"   . yas-next-field-or-maybe-expand)
 	      ("M-C-<tab>" . yas-next-field-or-maybe-expand)))
+
+(use-package xterm-color)
 
 (use-package ess
   :init

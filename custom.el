@@ -4,19 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor-type 'bar)
- '(ess-R-font-lock-keywords
-   '((ess-R-fl-keyword:keywords . t)
-     (ess-R-fl-keyword:constants . t)
-     (ess-R-fl-keyword:modifiers . t)
-     (ess-R-fl-keyword:fun-defs . t)
-     (ess-R-fl-keyword:assign-ops . t)
-     (ess-R-fl-keyword:%op% . t)
-     (ess-fl-keyword:fun-calls . t)
-     (ess-fl-keyword:numbers)
-     (ess-fl-keyword:operators)
-     (ess-fl-keyword:delimiters)
-     (ess-fl-keyword:=)
-     (ess-R-fl-keyword:F&T)))
  '(global-org-modern-mode t)
  '(keyboard-coding-system 'utf-8)
  '(org-agenda-files
@@ -29,20 +16,7 @@
  '(org-priority-lowest 68)
  '(org-return-follows-link t)
  '(package-selected-packages
-   '(indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
- '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook
-	   (lambda nil
-	     (if
-		 (y-or-n-p "Tangle?")
-		 (org-babel-tangle)))
-	   nil t)
-     (eval add-hook 'after-save-hook
-	   (lambda nil
-	     (if
-		 (y-or-n-p "Reload?")
-		 (load-file user-init-file)))
-	   nil t))))
+   '(modus-themes xterm-color highlight-indent-guides outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
