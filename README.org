@@ -322,6 +322,13 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
 (when is-mswindows
     (setq tramp-default-method "plink"))
 #+end_src
+** Dictionary
+#+begin_src emacs-lisp
+(use-package dictionary
+  :ensure nil
+  :custom
+  (dictionary-server "dict.org"))
+#+end_src
 ** PDF viewers
 Pdf-tools permet un meilleur affichage des PDF.
 #+begin_src emacs-lisp

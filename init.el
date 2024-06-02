@@ -215,6 +215,11 @@
 (when is-mswindows
     (setq tramp-default-method "plink"))
 
+(use-package dictionary
+  :ensure nil
+  :custom
+  (dictionary-server "dict.org"))
+
 (use-package pdf-tools
   :init
   (pdf-tools-install)  ; Standard activation command
