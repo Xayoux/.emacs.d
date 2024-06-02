@@ -262,6 +262,10 @@
   :bind
   ("M-g M-i" . ivy-imenu-anywhere))
 
+(use-package recentf
+  :custom
+  (recentf-max-saved-items 50))
+
 (use-package pdf-tools
   :init
   (pdf-tools-install)  ; Standard activation command

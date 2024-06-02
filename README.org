@@ -82,7 +82,6 @@ options(help_type="text",repos=c(CRAN="https://cran.r-project.org"))
   (use-package-always-ensure t))
 #+end_src
 
-
 * Emacs startup
 #+begin_src emacs-lisp
 (use-package dashboard
@@ -383,7 +382,12 @@ Flatten =imenu= so that we can jump to any subheading from the main menu.
   :bind
   ("M-g M-i" . ivy-imenu-anywhere))
 #+end_src
-
+** Recent files
+#+begin_src emacs-lisp
+(use-package recentf
+  :custom
+  (recentf-max-saved-items 50))
+#+end_src
 ** PDF viewers
 Pdf-tools permet un meilleur affichage des PDF.
 #+begin_src emacs-lisp
