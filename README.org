@@ -439,6 +439,13 @@ Use =outline-minor-faces= to use a special face for outline sections for R-mode
   :hook
   (R-mode . outline-minor-faces-mode))
 #+end_src
+** Windows management
+#+begin_src emacs-lisp
+(use-package windmove
+  :ensure nil
+  :config
+  (windmove-default-keybindings))
+#+end_src
 * Auto-completion
 ** Company
 #+begin_src emacs-lisp

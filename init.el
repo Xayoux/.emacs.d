@@ -303,6 +303,11 @@
   :hook
   (R-mode . outline-minor-faces-mode))
 
+(use-package windmove
+  :ensure nil
+  :config
+  (windmove-default-keybindings))
+
 (use-package company
   :init
   (add-hook 'after-init-hook 'global-company-mode)
