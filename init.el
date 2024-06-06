@@ -966,7 +966,7 @@ capture was not aborted."
          (:name "Travail"  ; Name
                 :tag "work" ; Filter criteria
                 :order 3 ; Order it should appear in the agenda view
-                :face '(:background "white")) ; Font face used for text
+                ) ; Font face used for text
 
 	 (:name "Savoir"
 		:tag "savoir"
