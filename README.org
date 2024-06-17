@@ -362,7 +362,18 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
   :hook
   (dired-mode . diredfl-mode))
 #+end_src
-** Imenu
+** ibuffer
+Gather buffers per project in =ibuffer= using =ibuffer-project=
+#+begin_src emacs-lisp
+(use-package ibuffer-project
+  :hook
+  (ibuffer .
+	   (lambda ()
+	     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+	     (unless (eq ibuffer-sorting-mode 'project-file-relative)
+	       (ibuffer-do-sort-by-project-file-relative)))))
+#+end_src
+** imenu
 Permet d'afficher et de naviguer au entre les fonctions et les packages dans un mode de programmation
 #+begin_src emacs-lisp
 (use-package imenu
