@@ -82,6 +82,24 @@ options(help_type="text",repos=c(CRAN="https://cran.r-project.org"))
   (use-package-always-ensure t))
 #+end_src
 
+To keep GPG jeys up to date
+#+begin_src emacs-lisp
+(use-package gnu-elpa-keyring-update)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package quelpa
+  :custom
+  (quelpa-update-melpa-p nil)) ; Prevent update at all startup
+
+(use-package quelpa-use-package)
+#+end_src
+
+#+begin_src emacs-lisp
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+(require 'vc-use-package)
+#+end_src
 * Emacs startup
 #+begin_src emacs-lisp
 (use-package dashboard

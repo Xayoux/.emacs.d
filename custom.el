@@ -44,7 +44,10 @@
  '(org-priority-lowest 68)
  '(org-return-follows-link t)
  '(package-selected-packages
-   '(tree-sitter-ess-r imenu-anywhere flimenu imenu-list diredfl modus-themes dashboard indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
+   '(gnu-elpa-keyring-update ts-fold vc-use-package tree-sitter-ess-r imenu-anywhere flimenu imenu-list diredfl modus-themes dashboard indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
+ '(package-vc-selected-packages
+   '((ts-fold :vc-backend Git :url "https://github.com/emacs-tree-sitter/ts-fold")
+     (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package")))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil

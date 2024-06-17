@@ -21,6 +21,18 @@
   ;; Always download packages if not available
   (use-package-always-ensure t))
 
+(use-package gnu-elpa-keyring-update)
+
+(use-package quelpa
+  :custom
+  (quelpa-update-melpa-p nil)) ; Prevent update at all startup
+
+(use-package quelpa-use-package)
+
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+(require 'vc-use-package)
+
 (use-package dashboard
   :if (display-graphic-p)
   :custom
