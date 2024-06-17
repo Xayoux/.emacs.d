@@ -1520,6 +1520,14 @@ Ajoute automatiquement les paires de parenthèses et autres.
     (add-hook 'latex-mode-hook 'smartparens-mode))
   :config (progn (show-smartparens-global-mode t)))
 #+end_src
+*** Tree sitter
+#+begin_src emacs-lisp
+(use-package tree-sitter-ess-r
+  :hook (ess-r-mode . tree-sitter-ess-r-mode-activate))
+
+(use-package ts-fold
+    :vc (:fetcher github :repo emacs-tree-sitter/ts-fold))
+#+end_src
 * Custom variables
 #+begin_src emacs-lisp
 (custom-set-variables
@@ -1561,7 +1569,6 @@ Define a file in which any customization is saved
 # eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Reload?")(load-file user-init-file))) nil t)
 # eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Tangle?")(org-babel-tangle))) nil t)
 # End:
-
 
 
 

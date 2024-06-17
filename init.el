@@ -1225,6 +1225,12 @@ capture was not aborted."
     (add-hook 'latex-mode-hook 'smartparens-mode))
   :config (progn (show-smartparens-global-mode t)))
 
+(use-package tree-sitter-ess-r
+  :hook (ess-r-mode . tree-sitter-ess-r-mode-activate))
+
+(use-package ts-fold
+    :vc (:fetcher github :repo emacs-tree-sitter/ts-fold))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -44,7 +44,7 @@
  '(org-priority-lowest 68)
  '(org-return-follows-link t)
  '(package-selected-packages
-   '(imenu-anywhere flimenu imenu-list diredfl modus-themes dashboard indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
+   '(tree-sitter-ess-r imenu-anywhere flimenu imenu-list diredfl modus-themes dashboard indent-guide highlight-indent-guides copilot quelpa-use-package quelpa diff-hl magit-delta outline-minor-faces bicycle org-roam-ui rainbow-delimiters ligature nerd-icons-completion nerd-icons-ibuffer nerd-icons-ivy-rich nerd-icons-dired rainbow-mode ivy-rich magit org-roam rutils ess org org-fragtog org-modern org-appear cdlatex yasnippet ivy-prescient ivy-xref counsel company-box company-reftex company-math company-bibtex company visual-fill-column adaptive-wrap auctex doom-themes doom-modeline))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil
