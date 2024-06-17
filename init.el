@@ -246,6 +246,32 @@
   :hook
   (dired-mode . diredfl-mode))
 
+(use-package grep
+  :ensure nil
+  :config
+  (if is-mswindows
+      (setq find-program "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\"")))
+
+(use-package ripgrep
+  :config
+  (defun my-ripgrep-in-same-extension (expression)
+    "Search for EXPRESSION in files with the same extension as the
+current buffer within the project or the current directory if not in a project."
+    (interactive
+     (list
+      (read-from-minibuffer "Ripgrep search for: " (thing-at-point 'symbol))))
+    (let* ((extension (file-name-extension (buffer-file-name)))
+           (glob (if extension (concat "*." extension) "*"))
+           ;; Check if we are inside a project. If not, use `nil`.
+           (project (if (ignore-errors (project-current)) (project-current) nil))
+           ;; Use project root if in a project, otherwise use `default-directory`.
+           (root (if project (project-root project) default-directory)))
+      (ripgrep-regexp expression
+                    root
+                    (list (format "-g %s" glob)))))
+  :bind
+  ("C-c f" . my-ripgrep-in-same-extension))
+
 (use-package project)
 
 (use-package ibuffer-project

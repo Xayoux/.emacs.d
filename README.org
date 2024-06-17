@@ -362,6 +362,40 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
   :hook
   (dired-mode . diredfl-mode))
 #+end_src
+** Grep and friends
+The find program included with Windows is not POSIX-compatible, so we need to use a different find. Since we cannot always change the PATH on all Windows computers, it is better to use the find provided by Git for Windows, which is always needed anyway.
+#+begin_src emacs-lisp
+(use-package grep
+  :ensure nil
+  :config
+  (if is-mswindows
+      (setq find-program "\"C:\\Program Files\\Git\\usr\\bin\\find.exe\"")))
+#+end_src
+
+ripgrep package needed to have a proper interface for ripgrep.
+
+It should also be possible to directly substitute grep by ripgrep as explained in https://stegosaurusdormant.com/emacs-ripgrep/.
+#+begin_src emacs-lisp
+(use-package ripgrep
+  :config
+  (defun my-ripgrep-in-same-extension (expression)
+    "Search for EXPRESSION in files with the same extension as the
+current buffer within the project or the current directory if not in a project."
+    (interactive
+     (list
+      (read-from-minibuffer "Ripgrep search for: " (thing-at-point 'symbol))))
+    (let* ((extension (file-name-extension (buffer-file-name)))
+           (glob (if extension (concat "*." extension) "*"))
+           ;; Check if we are inside a project. If not, use `nil`.
+           (project (if (ignore-errors (project-current)) (project-current) nil))
+           ;; Use project root if in a project, otherwise use `default-directory`.
+           (root (if project (project-root project) default-directory)))
+      (ripgrep-regexp expression
+                    root
+                    (list (format "-g %s" glob)))))
+  :bind
+  ("C-c f" . my-ripgrep-in-same-extension))
+#+end_src
 ** Project
 #+begin_src emacs-lisp
 (use-package project)
