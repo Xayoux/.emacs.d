@@ -362,6 +362,10 @@ Make the scratch buffer an =org-mode= buffer and remove the scratch message
   :hook
   (dired-mode . diredfl-mode))
 #+end_src
+** Project
+#+begin_src emacs-lisp
+(use-package project)
+#+end_src
 ** ibuffer
 Gather buffers per project in =ibuffer= using =ibuffer-project=
 #+begin_src emacs-lisp

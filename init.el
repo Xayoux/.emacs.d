@@ -246,6 +246,8 @@
   :hook
   (dired-mode . diredfl-mode))
 
+(use-package project)
+
 (use-package ibuffer-project
   :hook
   (ibuffer .
