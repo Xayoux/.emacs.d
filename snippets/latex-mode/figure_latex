@@ -4,7 +4,7 @@
 # --
 \begin{figure}[${1:!h}]
 \centering
-\includegraphics[width=0.8\linewidth]{$2}
-\caption{$3}
+\includegraphics[width=${2:0.8}\linewidth]{$3}
+\caption{$4}
 $0
 \end{figure}
