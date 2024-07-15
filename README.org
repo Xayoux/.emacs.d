@@ -675,16 +675,16 @@ Use LaTeX mode. Put the path to folder containing pdflatex.exe in the environmen
 
   ;; Preview
   (preview-auto-cache-preamble t)
-  (preview-default-option-list '("displaymath" "graphics" "textmath"))
+  (preview-default-option-list '("displaymath" "textmath" "sections"))
 
   ;; Fold-mode
 
-  ;; Personalize the list of commands to be folded
+  ;; Personalize the list of commands to be foldedv
   (TeX-fold-macro-spec-list
    '(("[f]"
       ("footnote" "marginpar"))
-     ("[c]"
-      ("citeyear" "citeauthor" "citep" "citet" "cite"))
+     ;; ("[c]"
+     ;;  ("citeyear" "citeauthor" "citep" "citet" "cite"))
      ("[l]"
       ("label"))
      ("[r]"
@@ -702,11 +702,7 @@ Use LaTeX mode. Put the path to folder containing pdflatex.exe in the environmen
      ("TM"
       ("texttrademark"))
      (1
-      ("part" "chapter" "section" "subsection" "subsubsection" "
-paragraph" "subparagraph" "part*" "chapter*" "section*" "
-subsection*" "subsubsection*" "paragraph*" "subparagraph*" "emph" "
-textit" "textsl" "textmd" "textrm" "textsf" "texttt" "textbf" "
-textsc" "textup"))))
+      ("part" "chapter" "section" "subsection" "subsubsection" "paragraph" "subparagraph" "part*" "chapter*" "section*" "subsection*" "subsubsection*" "paragraph*" "subparagraph*" "emph" "textit" "textsl" "textmd" "textrm" "textsf" "texttt" "textbf" "textsc" "textup" "cite" "citeyear" "citeauthor" "citep" "citet"))))
   ;; Prevent folding of math to let prettify-symbols do the job
   (TeX-fold-math-spec-list-internal nil)
   (TeX-fold-math-spec-list nil)
