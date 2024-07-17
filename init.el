@@ -318,6 +318,8 @@ current buffer within the project or the current directory if not in a project."
   :init
   (pdf-tools-install)  ; Standard activation command
   (pdf-loader-install) ; On demand loading, leads to faster startup time
+  :custom
+  (pdf-view-display-size 'fit-page)
   :config
   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
 	TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
@@ -344,7 +346,12 @@ current buffer within the project or the current directory if not in a project."
   :after outline
   :bind (:map outline-minor-mode-map
               ([C-tab] . bicycle-cycle)
-              ([S-tab] . bicycle-cycle-global)))
+	      ;; bicycle-cycle-global should not be used in org-mode, hence this function
+              ([S-tab] . (lambda ()
+                           (interactive)
+                           (if (derived-mode-p 'org-mode)
+                               (org-cycle-global)
+                             (bicycle-cycle-global))))))
 
 (use-package outline-minor-faces
   :after outline
@@ -666,7 +673,7 @@ current buffer within the project or the current directory if not in a project."
   :ensure nil
   :custom
   (org-cite-global-bibliography
-   (list (substitute-in-file-name "${BIBINPUTS}/References.bib"))))
+   (list (substitute-in-file-name "~/Documents/RoamNotes/references/master.bib"))))
 
 (use-package org-fragtog
   :hook
@@ -1092,6 +1099,69 @@ capture was not aborted."
 
 ;; Keybind pour affficher l'interface helm-bibtex
 (global-set-key (kbd "C-c n b") 'helm-bibtex) ; keybinding
+
+(use-package citar
+  :after (org nerd-icons)
+  :config
+  ;; Configuration to use nerd-icons in citar
+  (defvar citar-indicator-files-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-faicon
+              "nf-fa-file_o"
+              :face 'nerd-icons-green
+              :v-adjust -0.1)
+     :function #'citar-has-files
+     :padding "  " ; need this because the default padding is too low for these icons
+     :tag "has:files"))
+  (defvar citar-indicator-links-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-faicon
+              "nf-fa-link"
+              :face 'nerd-icons-orange
+              :v-adjust 0.01)
+     :function #'citar-has-links
+     :padding "  "
+     :tag "has:links"))
+  (defvar citar-indicator-notes-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-codicon
+              "nf-cod-note"
+              :face 'nerd-icons-blue
+              :v-adjust -0.3)
+     :function #'citar-has-notes
+     :padding "    "
+     :tag "has:notes"))
+  (defvar citar-indicator-cited-icons
+    (citar-indicator-create
+     :symbol (nerd-icons-faicon
+              "nf-fa-circle_o"
+              :face 'nerd-icon-green)
+     :function #'citar-is-cited
+     :padding "  "
+     :tag "is:cited"))
+  (setq citar-indicators
+	(list citar-indicator-files-icons
+          citar-indicator-links-icons
+          citar-indicator-notes-icons
+          citar-indicator-cited-icons)) 
+  :custom
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  (citar-library-paths
+   (list (substitute-in-file-name "~/Documents/RoamNotes/references/documents/")))
+  (citar-notes-paths
+   (list (substitute-in-file-name "~/Documents/RoamNotes/references/notes/")))
+  (citar-templates
+   '((main . "${author editor:30%sn}     ${date year issued:4}     ${title:48}")
+     (suffix . "          ${=key= id:7}    ${=type=:12}    ${journal journaltitle}")
+     (preview . "${author editor:%etal} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+        (note . "Notes on ${author editor:%etal}, ${title}")))
+  :hook
+  (org-mode . citar-capf-setup)
+  :bind
+  (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
 
 (defun my-unfill-paragraph ()
   "Unfill paragraph."
