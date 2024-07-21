@@ -10,7 +10,7 @@ Set up environment variables PATH into the R bin folder.
 
 Set up the environment PATH into the texlive bin/windows folder
 
-Set up the environment variable 'RoamNotes' into the RoamNotes folder.
+Set up the environment variable 'RoamNotes' into the RoamNotes folder. Tous les chemins d'accès pour l'utilisation de romanotes et co sont définis à partir du chemin de cette variable d'environnement.
 
 Set up the environment PATH into C:\Program Files\Git\usr\bin
 
@@ -649,8 +649,7 @@ Use =outline-minor-faces= to use a special face for outline sections for R-mode
   (remove-hook 'with-editor-filter-visit-hook 'magit-commit-diff))
 #+end_src
 
-* Text
-** LaTeX
+* LaTeX
 Use LaTeX mode. Put the path to folder containing pdflatex.exe in the environment variable PATH. (bin/windows).
 #+begin_src emacs-lisp
 (use-package tex
@@ -801,8 +800,8 @@ CdLatex for super fast input of TeX mathematicals expressions
   (cdlatex-tab . my-cdlatex-indent-maybe))
 #+end_src
 
-** Org
-*** Langage
+* Org
+** Langage
 #+begin_src emacs-lisp
 (use-package org
   :ensure nil
@@ -847,7 +846,7 @@ CdLatex for super fast input of TeX mathematicals expressions
      (shell . t))))
 #+end_src
 
-*** Aesthetic
+** Aesthetic
 Use =org-appear= for markup markers to appear automatically.
 #+begin_src emacs-lisp
 (use-package org-appear
@@ -895,8 +894,191 @@ Labels des ordres de priorité
 	      )
        )
 #+end_src
-*** Orga-roam
-**** Basic configuration
+** Org-agenda
+Les codes pour cette section proviennent pour la plupart de [[https://www.youtube.com/watch?v=a_WNtuefREM][Making org agenda look beautiful]] (voir le [[https://librephoenix.com/2023-12-30-making-org-agenda-look-beautiful][blog]] pour les codes).
+*** Centrage de l'agenda
+Fonctions pour centrer/réduire - décentrer l'agenda dans son buffer.
+   - Touche =c= dans l'agenda pour centrer puis shrink si rappuyé.
+   - Touche =d= dans l'agenda pour décentrer.
+
+Centrer l'agenda dans sa fenêtre / réduire sa largeur.
+#+begin_src emacs-lisp
+;;Function to center or shrink the agenda.
+(defun org-agenda-center ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
+    (when (eq this-command 'org-agenda)
+      ;; Activate olivetti-mode when 'c' is pressed
+      (define-key org-agenda-mode-map "c"
+        (lambda ()
+          (interactive)
+          (if (not olivetti-mode)
+              (olivetti-mode 1)
+	    ;;if Olivetti il already active, then shrink the width at x
+            (olivetti-set-width 130)))))))
+
+;; Adds hook to org agenda mode, making follow mode active in org agenda
+(add-hook 'org-agenda-mode-hook 'org-agenda-center)
+#+end_src
+
+Décentrer l'agenda dans sa fenêtre.
+#+begin_src emacs-lisp
+;; Function to decenter the agenda.
+(defun org-agenda-decenter ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
+    (when (eq this-command 'org-agenda)
+      ;; Activate olivetti-mode when 'd' is pressed
+      (define-key org-agenda-mode-map "d"
+		  (lambda ()
+		    (interactive)
+		    (if (olivetti-mode)
+		    (olivetti-mode 0)))))))
+
+;; Add hook to org-agenda-mode, activate olivetti-mode only when org-agenda function is called and 'd' is pressed
+(add-hook 'org-agenda-mode-hook 'org-agenda-decenter)
+
+#+end_src
+
+Centre directement l'agenda dans sa fenêtre quand la fonction =org-agenda-list= est utilisée.
+#+begin_src emacs-lisp
+;;Center directly the agenda if it is open with the 'org-agenda-list' function
+(defun org-agenda-open-hook-2 ()
+  ;; Check if the current buffer is an org-agenda buffer
+  (when (eq major-mode 'org-agenda-mode)
+    ;; Check if org-agenda-list function was called to open the buffer
+    (when (eq this-command 'org-agenda-list)
+      ;; Activate olivetti-mode only when org-agenda-list is called
+      (olivetti-mode 1))))
+
+;; Ajoute le hook à org-agenda-mode, ne faisant activer le mode olivetti que lorsque org-agenda-list est appelée
+(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook-2)
+#+end_src
+
+*** Bindings
+Définir les touches =C-c n n a= pour ouvrir la liste de l'agenda.
+
+Définir les touches =C-n n n t= pour ouvrir la liste de toutes les TODO.
+#+begin_src emacs-lisp
+;; Define keybind to open fast the agenda
+(global-set-key (kbd "C-c n n a") 'org-agenda-list)
+(global-set-key (kbd "C-c n n t") 'org-todo-list)
+#+end_src
+
+*** Aesthetic
+Montre uniquement un jour à la fois pour limiter le nombre d'informations dans l'agenda.
+#+begin_src emacs-lisp
+;; Only show one day of the agenda at a time
+(setq org-agenda-span 1
+      org-agenda-start-day "+0d")
+#+end_src
+
+Reduce duplicate entries.
+#+begin_src emacs-lisp
+;; Hide duplicates of the same todo item
+;; If it has more than one of timestamp, scheduled,
+;; or deadline information
+(setq org-agenda-skip-timestamp-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-scheduled-if-deadline-is-shown t
+      org-agenda-skip-timestamp-if-deadline-is-shown t)
+#+end_src
+
+Enlève les --- dans l'agenda
+Ajoute 5 espaces Afin d'aligner les task
+#+begin_src emacs-lisp
+;; Ricing org agenda
+(setq org-agenda-current-time-string "")
+(setq org-agenda-time-grid '((daily) () "     " ""))
+#+end_src
+
+Enlever le trop plein d'informations : tags, "deadline", "schedule"...
+#+begin_src emacs-lisp
+(setq org-agenda-hide-tags-regexp ".*")
+
+(setq org-agenda-prefix-format '(
+(agenda . "  %?-2i %t %s ")
+ (todo . " %i %-15:c")
+ (tags . " %i %-15:c")
+ (search . " %i %-15:c")))
+#+end_src
+
+Set-up les icones pour les différentes catégories de Projects
+#+begin_src emacs-lisp
+(setq org-agenda-category-icon-alist
+      `(
+        ("Vie" ,(list (all-the-icons-faicon "home" :v-adjust 0.005)) nil nil :ascent center)
+	("Haute Couture" ,(list (nerd-icons-faicon "nf-fa-cut" :height 0.9)) nil nil :ascent center)
+	("Econométrie" ,(list (nerd-icons-faicon "nf-fa-chart_line" :height 0.9)) nil nil :ascent center)
+	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
+	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
+	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
+	("Economie mondiale" ,(list (nerd-icons-mdicon "nf-md-earth" :height 0.9)) nil nil :ascent center)
+	("Théâtre" ,(list (nerd-icons-faicon "nf-fa-masks_theater" :height 0.9)) nil nil :ascent center)
+	)
+      )
+#+end_src
+
+Set-up le [[https://github.com/alphapapa/org-super-agenda][org-super-agenda]] pour une meilleure visibilité.
+#+begin_src emacs-lisp
+;; Load org-super-agenda
+(require 'org-super-agenda)
+(org-super-agenda-mode t)
+
+(setq org-super-agenda-groups
+       '(;; Each group has an implicit boolean OR operator between its selectors.
+
+         ;; This is the first filter, anything found here
+         ;; will be placed in this group
+         ;; even if it matches following groups
+
+	 (:name "Today"
+		:date today
+		:scheduled today
+		:order 3)
+
+	 (:name "Deadline Retard"
+		:deadline past
+		:order 1
+		:face '(error :underline t))
+
+         (:name "Retard" ; Name
+                :scheduled past ; Filter criteria
+                :order 2 ; Order it should appear in agenda view
+                :face 'error) ; Font face used for text
+
+	 (:name "Deadline"
+		:deadline t
+		:order 2
+		:face 'warning)
+
+         (:name "Perso" ; Name
+                :tag "life" ; Filter criteria
+                :order 4 ; Order it should appear in the agenda view
+                ) ; Font faced used for text
+
+         (:name "Travail"  ; Name
+                :tag "work" ; Filter criteria
+                :order 3 ; Order it should appear in the agenda view
+                ) ; Font face used for text
+
+	 (:name "Savoir"
+		:tag "savoir"
+		:order 3)
+
+         ;; Fourth filter..
+         (:name "Autre"  ; Optionally specify section name
+                :order 5 ; Order it should appear in the agenda view
+                )
+        )
+)
+#+end_src
+
+** Orga-roam
+*** Basic configuration
 La configuration basique de org-roam provient de [[https://www.youtube.com/watch?v=3-sLBaJAtew][Org Roam: the best way to keep a joural in emacs]] (voir le [[https://systemcrafters.net/build-a-second-brain-in-emacs/keep-a-journal/][blog]]). 
 #+begin_src emacs-lisp
 (use-package org-roam
@@ -962,7 +1144,7 @@ La configuration basique de org-roam provient de [[https://www.youtube.com/watch
   (org-roam-db-autosync-mode))
 #+end_src
 
-**** Functionalities
+*** Functionalities
 Les fonctionnalités présentes ici proviennent de [[https://www.youtube.com/watch?v=CUkuyW6hr18][5 org roam hacks for better productivity in emacs]] (voir [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][blog]]).
 
 Insert node immediately without open it.
@@ -1128,7 +1310,7 @@ Enlever l'ordre de priorité lorsqu'une TODO passe sur DONE
 
 #+end_src
 
-**** Org-roam UI
+*** Org-roam UI
 #+begin_src emacs-lisp
 (use-package org-roam-ui
     :config
@@ -1137,190 +1319,7 @@ Enlever l'ordre de priorité lorsqu'une TODO passe sur DONE
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 #+end_src
-*** Org-agenda
-Les codes pour cette section proviennent pour la plupart de [[https://www.youtube.com/watch?v=a_WNtuefREM][Making org agenda look beautiful]] (voir le [[https://librephoenix.com/2023-12-30-making-org-agenda-look-beautiful][blog]] pour les codes).
-**** Centrage de l'agenda
-Fonctions pour centrer/réduire - décentrer l'agenda dans son buffer.
-   - Touche =c= dans l'agenda pour centrer puis shrink si rappuyé.
-   - Touche =d= dans l'agenda pour décentrer.
-
-Centrer l'agenda dans sa fenêtre / réduire sa largeur.
-#+begin_src emacs-lisp
-;;Function to center or shrink the agenda.
-(defun org-agenda-center ()
-  ;; Check if the current buffer is an org-agenda buffer
-  (when (eq major-mode 'org-agenda-mode)
-    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
-    (when (eq this-command 'org-agenda)
-      ;; Activate olivetti-mode when 'c' is pressed
-      (define-key org-agenda-mode-map "c"
-        (lambda ()
-          (interactive)
-          (if (not olivetti-mode)
-              (olivetti-mode 1)
-	    ;;if Olivetti il already active, then shrink the width at x
-            (olivetti-set-width 130)))))))
-
-;; Adds hook to org agenda mode, making follow mode active in org agenda
-(add-hook 'org-agenda-mode-hook 'org-agenda-center)
-#+end_src
-
-Décentrer l'agenda dans sa fenêtre.
-#+begin_src emacs-lisp
-;; Function to decenter the agenda.
-(defun org-agenda-decenter ()
-  ;; Check if the current buffer is an org-agenda buffer
-  (when (eq major-mode 'org-agenda-mode)
-    ;; Activate olivetti-mode if the agenda was opened using 'org-agenda' function
-    (when (eq this-command 'org-agenda)
-      ;; Activate olivetti-mode when 'd' is pressed
-      (define-key org-agenda-mode-map "d"
-		  (lambda ()
-		    (interactive)
-		    (if (olivetti-mode)
-		    (olivetti-mode 0)))))))
-
-;; Add hook to org-agenda-mode, activate olivetti-mode only when org-agenda function is called and 'd' is pressed
-(add-hook 'org-agenda-mode-hook 'org-agenda-decenter)
-
-#+end_src
-
-Centre directement l'agenda dans sa fenêtre quand la fonction =org-agenda-list= est utilisée.
-#+begin_src emacs-lisp
-;;Center directly the agenda if it is open with the 'org-agenda-list' function
-(defun org-agenda-open-hook-2 ()
-  ;; Check if the current buffer is an org-agenda buffer
-  (when (eq major-mode 'org-agenda-mode)
-    ;; Check if org-agenda-list function was called to open the buffer
-    (when (eq this-command 'org-agenda-list)
-      ;; Activate olivetti-mode only when org-agenda-list is called
-      (olivetti-mode 1))))
-
-;; Ajoute le hook à org-agenda-mode, ne faisant activer le mode olivetti que lorsque org-agenda-list est appelée
-(add-hook 'org-agenda-mode-hook 'org-agenda-open-hook-2)
-#+end_src
-
-**** Bindings
-Définir les touches =C-c n n a= pour ouvrir la liste de l'agenda.
-
-Définir les touches =C-n n n t= pour ouvrir la liste de toutes les TODO.
-#+begin_src emacs-lisp
-;; Define keybind to open fast the agenda
-(global-set-key (kbd "C-c n n a") 'org-agenda-list)
-(global-set-key (kbd "C-c n n t") 'org-todo-list)
-#+end_src
-
-**** Aesthetic
-Montre uniquement un jour à la fois pour limiter le nombre d'informations dans l'agenda.
-#+begin_src emacs-lisp
-;; Only show one day of the agenda at a time
-(setq org-agenda-span 1
-      org-agenda-start-day "+0d")
-#+end_src
-
-Reduce duplicate entries.
-#+begin_src emacs-lisp
-;; Hide duplicates of the same todo item
-;; If it has more than one of timestamp, scheduled,
-;; or deadline information
-(setq org-agenda-skip-timestamp-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-scheduled-if-deadline-is-shown t
-      org-agenda-skip-timestamp-if-deadline-is-shown t)
-#+end_src
-
-Enlève les --- dans l'agenda
-Ajoute 5 espaces Afin d'aligner les task
-#+begin_src emacs-lisp
-;; Ricing org agenda
-(setq org-agenda-current-time-string "")
-(setq org-agenda-time-grid '((daily) () "     " ""))
-#+end_src
-
-Enlever le trop plein d'informations : tags, "deadline", "schedule"...
-#+begin_src emacs-lisp
-(setq org-agenda-hide-tags-regexp ".*")
-
-(setq org-agenda-prefix-format '(
-(agenda . "  %?-2i %t %s ")
- (todo . " %i %-15:c")
- (tags . " %i %-15:c")
- (search . " %i %-15:c")))
-#+end_src
-
-Set-up les icones pour les différentes catégories de Projects
-#+begin_src emacs-lisp
-(setq org-agenda-category-icon-alist
-      `(
-        ("Vie" ,(list (all-the-icons-faicon "home" :v-adjust 0.005)) nil nil :ascent center)
-	("Haute Couture" ,(list (nerd-icons-faicon "nf-fa-cut" :height 0.9)) nil nil :ascent center)
-	("Econométrie" ,(list (nerd-icons-faicon "nf-fa-chart_line" :height 0.9)) nil nil :ascent center)
-	("Code" ,(list (nerd-icons-faicon "nf-fa-code" :height 0.9)) nil nil :ascent center)
-	("Sport" ,(list (nerd-icons-faicon "nf-fa-dumbbell" :height 0.9)) nil nil :ascent center)
-	("Emacs Improve" ,(list (nerd-icons-sucicon "nf-custom-orgmode" :height 0.9)) nil nil :ascent center)
-	("Economie mondiale" ,(list (nerd-icons-mdicon "nf-md-earth" :height 0.9)) nil nil :ascent center)
-	("Théâtre" ,(list (nerd-icons-faicon "nf-fa-masks_theater" :height 0.9)) nil nil :ascent center)
-	)
-      )
-#+end_src
-
-Set-up le [[https://github.com/alphapapa/org-super-agenda][org-super-agenda]] pour une meilleure visibilité.
-#+begin_src emacs-lisp
-;; Load org-super-agenda
-(require 'org-super-agenda)
-(org-super-agenda-mode t)
-
-(setq org-super-agenda-groups
-       '(;; Each group has an implicit boolean OR operator between its selectors.
-
-         ;; This is the first filter, anything found here
-         ;; will be placed in this group
-         ;; even if it matches following groups
-
-	 (:name "Today"
-		:date today
-		:scheduled today
-		:order 3)
-
-	 (:name "Deadline Retard"
-		:deadline past
-		:order 1
-		:face '(error :underline t))
-
-         (:name "Retard" ; Name
-                :scheduled past ; Filter criteria
-                :order 2 ; Order it should appear in agenda view
-                :face 'error) ; Font face used for text
-
-	 (:name "Deadline"
-		:deadline t
-		:order 2
-		:face 'warning)
-
-         (:name "Perso" ; Name
-                :tag "life" ; Filter criteria
-                :order 4 ; Order it should appear in the agenda view
-                ) ; Font faced used for text
-
-         (:name "Travail"  ; Name
-                :tag "work" ; Filter criteria
-                :order 3 ; Order it should appear in the agenda view
-                ) ; Font face used for text
-
-	 (:name "Savoir"
-		:tag "savoir"
-		:order 3)
-
-         ;; Fourth filter..
-         (:name "Autre"  ; Optionally specify section name
-                :order 5 ; Order it should appear in the agenda view
-                )
-        )
-)
-#+end_src
-
-*** Org-roam-bibtex
+** Org-roam-bibtex
 Configuration de l'environnement pour utiliser les références efficacement avec org-roam. La configuration provient de ce [[https://org-roam.discourse.group/t/guide-bibliography-system-with-org-roam-bibtex-and-org-noter-integration/3293][guide]].
 #+begin_src emacs-lisp
 ;; Utilisation des packages nécessaires
@@ -1457,7 +1456,7 @@ Configuration de l'environnement pour utiliser les références efficacement ave
   :bind
   (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
 #+end_src
-*** Suivi de lecture
+** Suivi de lecture
 Fonction qui permet de filtrer une table et de ne renvoyer que les lignes qui correspondent au critère indiqué (critère applicable sur une ligne uniquement). 
 #+begin_src emacs-lisp
 (defun org-table-filter-by-column (column criterion)
@@ -1512,7 +1511,7 @@ CRITERION is the value or regular expression to filter by."
 ;; Raccourci clavier pour appeler facilement la fonction
 (define-key org-mode-map (kbd "C-f f") 'org-table-filter-by-column)
 #+end_src
-** Word wrapping and paragraph filling
+* Word wrapping and paragraph filling
 #+begin_src emacs-lisp
 (defun my-unfill-paragraph ()
   "Unfill paragraph."
@@ -1569,8 +1568,7 @@ Use =visual-fill-column= for text modes
 #+end_src
 
 * Programming
-** Programming tools
-*** Snippets
+** Snippets
 
 Use "C-TAB" for moving to next field to avoid conflict with autocompletion.
 
@@ -1587,7 +1585,7 @@ Use "C-TAB" for moving to next field to avoid conflict with autocompletion.
 	      ("M-C-<tab>" . yas-next-field-or-maybe-expand)))
 #+end_src
 
-*** Emacs Speaks Statistics (ESS)
+** Emacs Speaks Statistics (ESS)
 Package nécessaire pour corriger le bug de la console R
 [[https://github.com/emacs-ess/ESS/issues/1193][https://github.com/emacs-ess/ESS/issues/1193]] voir réponse de Lionel le 18 mai 2022.
 #+begin_src emacs-lisp
@@ -1705,7 +1703,7 @@ To interact easily with renv
   :after ess)
 #+end_src
 
-*** Smart parentheses
+** Smart parentheses
 Ajoute automatiquement les paires de parenthèses et autres.
 #+begin_src emacs-lisp
 (use-package smartparens-config
@@ -1719,7 +1717,7 @@ Ajoute automatiquement les paires de parenthèses et autres.
     (add-hook 'latex-mode-hook 'smartparens-mode))
   :config (progn (show-smartparens-global-mode t)))
 #+end_src
-*** Tree sitter
+** Tree sitter
 #+begin_src emacs-lisp
 (use-package tree-sitter-ess-r
   :hook (ess-r-mode . tree-sitter-ess-r-mode-activate))
