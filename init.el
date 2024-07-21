@@ -1167,6 +1167,58 @@ capture was not aborted."
   :bind
   (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
 
+(defun org-table-filter-by-column (column criterion)
+  "Filter rows in an org table based on a value or a regular expression in a specific column.
+COLUMN is the 0-indexed column to filter by.
+CRITERION is the value or regular expression to filter by."
+  (interactive "nColumn (0-indexed): \nsCriterion: ")
+  (let ((table (org-table-to-lisp)) ;; Convertit la table en liste
+        (new-table '())
+        (header nil)
+        (separator nil)
+        (compare-fn nil))
+    ;; Définir une fonction de comparaison si nécessaire
+    (when (string-match "^[<>]=? ?\\([0-9]+\\)$" criterion)
+      (let ((operator (match-string 0 criterion))
+            (threshold (string-to-number (match-string 1 criterion))))
+        (setq compare-fn
+              (cond
+               ((string-match "^>=" operator) (lambda (x) (>= x threshold)))
+               ((string-match "^>" operator) (lambda (x) (> x threshold)))
+               ((string-match "^<=" operator) (lambda (x) (<= x threshold)))
+               ((string-match "^<" operator) (lambda (x) (< x threshold)))))))
+    ;; Ignorer les deux premières lignes (en-tête et séparateur)
+    (setq header (car table))
+    (setq separator (cadr table))
+    ;; Parcourt les lignes de la table en ignorant les deux premières
+    (dolist (row (cddr table))
+      (let ((value (nth column row)))
+        (if compare-fn
+            ;; Utiliser la fonction de comparaison si définie
+            (when (funcall compare-fn (string-to-number value))
+              (push row new-table))
+          ;; Sinon, utiliser l'expression régulière
+          (when (string-match-p criterion value)
+            (push row new-table)))))
+    ;; Ajoute l'en-tête et la ligne de séparation en haut de la nouvelle table
+    (setq new-table (nreverse new-table))
+    (push separator new-table)
+    (push header new-table)
+    ;; Insère la nouvelle table
+    (save-excursion
+      (goto-char (org-table-end))
+      (newline)
+      (dolist (row new-table)
+        (if (eq row 'hline)
+            (insert "|------+------|")
+          (insert (concat "| " (mapconcat 'identity row " | ") " |")))
+        (newline))
+      ;; Réaligne la nouvelle table
+      (org-table-align))))
+
+;; Raccourci clavier pour appeler facilement la fonction
+(define-key org-mode-map (kbd "C-f f") 'org-table-filter-by-column)
+
 (defun my-unfill-paragraph ()
   "Unfill paragraph."
   (interactive)
