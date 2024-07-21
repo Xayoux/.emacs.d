@@ -10,6 +10,10 @@ Set up environment variables PATH into the R bin folder.
 
 Set up the environment PATH into the texlive bin/windows folder
 
+Set up the environment variable 'RoamNotes' into the RoamNotes folder.
+
+Set up the environment PATH into C:\Program Files\Git\usr\bin
+
 ** Path à modifier
 Check in the Org-roam part for the path to the org-roam folder and the path and codes for the Templates.
 
