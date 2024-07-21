@@ -905,42 +905,46 @@ La configuration basique de org-roam provient de [[https://www.youtube.com/watch
   :init
   (setq org-roam-v2-ack t)
   (setq org-roam-node-display-template "${tags:50} ${title:100}")
-  :custom
-  (org-roam-directory "~/Documents/RoamNotes") 
-  (org-roam-completion-everywhere t)
-  (org-roam-capture-templates
-   '(
-     ("d" "default" plain
-      "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-      ("a" "article" plain
-      (file "~/Documents/RoamNotes/Templates/article-template.org")
-      :if-new (file+head "references/notes/${citekey}.org" "#+title: ${citekey}\n")
-      :unnarrowed t)
-     ("c" "code commandes" plain
-      (file "~/Documents/RoamNotes/Templates/code-commandes-template.org")
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("p" "projet" plain
-      (file "~/Documents/RoamNotes/Templates/projects-templates.org")
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     )
-   )
-  (org-roam-dailies-capture-templates
-    '(("d" "default" entry "* %?"
-       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: :daily:"))))
+  :config
+  ;; Définir org-roam-directory en utilisant getenv
+  (setq org-roam-directory (getenv "RoamNotes"))
+  ;; Définir les templates de capture en utilisant le chemin défini dans RoamNotes
+  (setq org-roam-capture-templates
+        `(("d" "default" plain
+           "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ("a" "article" plain
+           (file ,(concat (getenv "RoamNotes") "/Templates/article-template.org"))
+           :if-new (file+head "references/notes/${citekey}.org" "#+title: ${citekey}\n")
+           :unnarrowed t)
+          ("c" "code commandes" plain
+           (file ,(concat (getenv "RoamNotes") "/Templates/code-commandes-template.org"))
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ("p" "projet" plain
+           (file ,(concat (getenv "RoamNotes") "/Templates/projects-templates.org"))
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ("t" "théâtre" plain
+           (file ,(concat (getenv "RoamNotes") "/Templates/théâtre-template.org"))
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)))
+  ;; Définir les templates de capture quotidienne
+  (setq org-roam-dailies-capture-templates
+        `(("d" "default" entry "* %?"
+           :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: :daily:"))))
+  ;; Associer les touches de raccourci
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
-	 ("C-c n o" . org-id-get-create)
-	 ("C-c n A" . org-roam-alias-add)
-	 ("C-c n t" . org-roam-tag-add)
-	 ("C-c n I" . org-roam-node-insert-immediate)
+         ("C-c n o" . org-id-get-create)
+         ("C-c n A" . org-roam-alias-add)
+         ("C-c n t" . org-roam-tag-add)
+         ("C-c n I" . org-roam-node-insert-immediate)
          ("C-c n p" . my/org-roam-find-project)
-	 ("C-c n a" . my/org-roam-find-article)
-	 ("C-c n S" . my/org-roam-find-slipbox)
+         ("C-c n a" . my/org-roam-find-article)
+         ("C-c n S" . my/org-roam-find-slipbox)
          ("C-c n T" . my/org-roam-capture-task)
          ("C-c n b" . my/org-roam-capture-inbox)
          :map org-mode-map
@@ -951,8 +955,10 @@ La configuration basique de org-roam provient de [[https://www.youtube.com/watch
   :bind-keymap
   ("C-c n d" . org-roam-dailies-map)
   :config
-(org-roam-setup)
-(require 'org-roam-dailies) ;; Ensure the keymap is available
+  ;; Initialiser org-roam
+  (org-roam-setup)
+  ;; Assurer la disponibilité du keymap pour org-roam-dailies
+  (require 'org-roam-dailies)
   (org-roam-db-autosync-mode))
 #+end_src
 
@@ -1056,7 +1062,7 @@ Find and open of create "article" nodes.
    (my/org-roam-filter-by-tag "article")
    nil
    :templates
-   '(("a" "article" plain (file "~/Documents/RoamNotes/Templates/article-template.org")
+   `(("a" "article" plain (file ,(concat (getenv "RoamNotes") "/Templates/article-template.org"))
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n")
       :unnarrowed t))))
 #+end_src
@@ -1327,11 +1333,11 @@ Configuration de l'environnement pour utiliser les références efficacement ave
 ;; see also: http://www.jonathanleroux.org/bibtex-mode.html
 
 ;; Fichier qui contient la bibliographie
-(setq bibtex-completion-bibliography '("~/Documents/RoamNotes/references/master.bib"))  ; location of .bib file containing bibliography entries
+(setq bibtex-completion-bibliography `(,(concat (getenv "RoamNotes") "/references/master.bib")))  ; location of .bib file containing bibliography entries
 (setq bibtex-completion-find-additional-pdfs t)                          ; support for multiple pdfs for one %citekey
 (setq bibtex-completion-pdf-field "File")                                ; in bib entry, file = {/path/to/file.pdf} could be set to locate the accompanying file
-(setq bibtex-completion-library-path '("~/Documents/RoamNotes/references/documents/"))  ; in this dir, %citekey-name(s).pdf would automatically attach pdf(s) to %citekey
-(setq bibtex-completion-notes-path "~/Documents/RoamNotes/references/notes/")           ; dir to keep notes for the pdfs
+(setq bibtex-completion-library-path `(,(concat (getenv "RoamNotes") "/references/documents/")))  ; in this dir, %citekey-name(s).pdf would automatically attach pdf(s) to %citekey
+(setq bibtex-completion-notes-path (concat (getenv "RoamNotes") "/references/notes/"))           ; dir to keep notes for the pdfs
 
 ;; BEGIN: Change insert citation (<f3>) behaviour of helm-bibtex for org-mode 
 (defun custom/bibtex-completion-format-citation-org (keys)
@@ -1357,12 +1363,10 @@ Configuration de l'environnement pour utiliser les références efficacement ave
       bibtex-autokey-titlewords-stretch 1
       bibtex-autokey-titleword-length 5)
 
-
 ;(setq bibtex-completion-edit-notes-function 'bibtex-completion-edit-notes-default) ; default to org-ref for notes
 (setq bibtex-completion-edit-notes-function 'orb-bibtex-completion-edit-note) ; use org-roam-capture-templates for notes
 
-
-(setq org-noter-notes-search-path '("~/Documents/RoamNotes/references/notes/")) ; V IMPORTANT: SET FULL PATH!
+(setq org-noter-notes-search-path `(,(concat (getenv "RoamNotes") "/references/notes/"))) ; V IMPORTANT: SET FULL PATH!
 
 (setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file") ; customisation for notes, org-noter integration
       orb-process-file-keyword t
@@ -1440,18 +1444,19 @@ Configuration de l'environnement pour utiliser les références efficacement ave
   (org-cite-activate-processor 'citar)
   (citar-bibliography org-cite-global-bibliography)
   (citar-library-paths
-   (list (substitute-in-file-name "~/Documents/RoamNotes/references/documents/")))
+   (list (concat (getenv "RoamNotes") "/references/documents/")))
   (citar-notes-paths
-   (list (substitute-in-file-name "~/Documents/RoamNotes/references/notes/")))
+   (list (concat (getenv "RoamNotes") "/references/notes/")))
   (citar-templates
    '((main . "${author editor:30%sn}     ${date year issued:4}     ${title:48}")
      (suffix . "          ${=key= id:7}    ${=type=:12}    ${journal journaltitle}")
      (preview . "${author editor:%etal} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
-        (note . "Notes on ${author editor:%etal}, ${title}")))
+     (note . "Notes on ${author editor:%etal}, ${title}")))
   :hook
   (org-mode . citar-capf-setup)
   :bind
   (:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+#+end_src
 #+end_src
 ** Word wrapping and paragraph filling
 #+begin_src emacs-lisp
@@ -1689,7 +1694,6 @@ Ajoute automatiquement les paires de parenthèses et autres.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "JetBrains Mono" :foundry "outline" :slant normal :weight regular :height 120 :width normal)))))
 #+end_src 
-
 * Epilogue
 ** Custom File
 Define a file in which any customization is saved
