@@ -1511,6 +1511,60 @@ CRITERION is the value or regular expression to filter by."
 ;; Raccourci clavier pour appeler facilement la fonction
 (define-key org-mode-map (kbd "C-f f") 'org-table-filter-by-column)
 #+end_src
+** Suivi de Bibliographie
+#+begin_src emacs-lisp
+(defun my/org-copy-bibliographies ()
+  "Copie les sections 'Bibliographie' de tous les fichiers Org marqués avec le tag 'article' dans un document unique."
+  (interactive)
+  (let* ((org-roam-dir (getenv "RoamNotes"))
+         (target-file (expand-file-name "20240723052014-bibliographique_indicative.org" org-roam-dir))
+         (files (directory-files-recursively org-roam-dir "\\.org$"))
+         (bibliography-contents ""))
+    
+    ;; Parcourir tous les fichiers Org
+    (dolist (file files)
+      (with-temp-buffer
+        (insert-file-contents file)
+        (goto-char (point-min))
+        (when (re-search-forward "^#\\+filetags:.*:article:" nil t)
+          ;; Trouver et copier la section Bibliographie
+          (when (re-search-forward "^\\*\\* Bibliographie" nil t)
+            (let ((start (point)))
+              (if (re-search-forward "^\\*\\*" nil t)
+                  (setq bibliography-contents (concat bibliography-contents
+                                                     (buffer-substring-no-properties start (match-beginning 0))
+                                                     "\n"))
+                (setq bibliography-contents (concat bibliography-contents
+                                                   (buffer-substring-no-properties start (point-max))
+                                                   "\n"))))))))
+    
+    ;; Afficher le contenu copié pour débogage
+    (message "Contenu copié: %s" bibliography-contents)
+    
+    ;; Tuer le buffer du fichier cible s'il est ouvert
+    (let ((target-buffer (find-buffer-visiting target-file)))
+      (when target-buffer
+        (kill-buffer target-buffer)))
+    
+    ;; Écrire le contenu dans le fichier cible
+    (with-temp-buffer
+      (insert-file-contents target-file)
+      (goto-char (point-min))
+      (when (re-search-forward "^\\* Bibliographie" nil t)
+        (let ((start (point)))
+          (if (re-search-forward "^\\* " nil t)
+              (delete-region start (match-beginning 0))
+            (delete-region start (point-max)))))
+      (goto-char (point-min))
+      (when (re-search-forward "^\\* Bibliographie" nil t)
+        (goto-char (match-end 0))
+        (insert "\n" bibliography-contents))
+      (write-region (point-min) (point-max) target-file))))
+
+;; Ajoutez cette ligne pour tester facilement la fonction
+(my/org-copy-bibliographies)
+
+#+end_src
 * Word wrapping and paragraph filling
 #+begin_src emacs-lisp
 (defun my-unfill-paragraph ()
