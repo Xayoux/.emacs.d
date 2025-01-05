@@ -5,6 +5,10 @@
 \begin{figure}[${1:!h}]
 \centering
 \includegraphics[width=${2:0.8}\linewidth]{$3}
-\caption{$4}
+\captionsetup{justification=raggedright,singlelinecheck=false, font=small}
+  \caption*{\underline{Note} : $4
+  \\ \underline{Source} : $5}
+  \captionsetup{justification=centering, singlelinecheck=true, font=normalsize}
+  \caption{$6}
 $0
 \end{figure}

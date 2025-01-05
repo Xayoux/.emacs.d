@@ -12,6 +12,10 @@ $3 & $4 & $5 \\\
 \input{$6}\\\
 \hline
 \end{tabular}
-\caption{$7}
+\captionsetup{justification=raggedright,singlelinecheck=false, font=small}
+  \caption*{\underline{Note} : $7
+  \\ \underline{Source} : $8}
+  \captionsetup{justification=centering, singlelinecheck=true, font=normalsize}
+  \caption{$9}
 $0
 \end{table}
