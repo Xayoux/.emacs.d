@@ -3,7 +3,6 @@
 auto-save-list
 .org-id-locations
 bookmarks*
-elpa/
 org-persist/
 org-roam.db
 recentf
