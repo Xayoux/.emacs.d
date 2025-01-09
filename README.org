@@ -1528,7 +1528,7 @@ CRITERION is the value or regular expression to filter by."
         (goto-char (point-min))
         (when (re-search-forward "^#\\+filetags:.*:article:" nil t)
           ;; Trouver et copier la section Bibliographie
-          (when (re-search-forward "^\\*\\* Bibliographie" nil t)
+          (when (re-search-forward "^\\* Bibliographie" nil t)
             (let ((start (point)))
               (if (re-search-forward "^\\*\\*" nil t)
                   (setq bibliography-contents (concat bibliography-contents
