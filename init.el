@@ -1223,7 +1223,7 @@ CRITERION is the value or regular expression to filter by."
   "Copie les sections 'Bibliographie' de tous les fichiers Org marqués avec le tag 'article' dans un document unique."
   (interactive)
   (let* ((org-roam-dir (getenv "RoamNotes"))
-         (target-file (expand-file-name "20240723052014-bibliographique_indicative.org" org-roam-dir))
+         (target-file (expand-file-name "20250109123421-bibliographie_indicative.org" org-roam-dir))
          (files (directory-files-recursively org-roam-dir "\\.org$"))
          (bibliography-contents ""))
     
