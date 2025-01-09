@@ -1563,8 +1563,42 @@ CRITERION is the value or regular expression to filter by."
 
 ;; Ajoutez cette ligne pour tester facilement la fonction
 (my/org-copy-bibliographies)
-
 #+end_src
+
+#+begin_src emacs-lisp
+(defun my/org-copy-to-cited-authors ()
+  "Copy the selected text and append it to the 'Auteurs cités' section in an Org buffer.
+Creates the section at the end of the document if it doesn't exist.
+The first entry is added directly after the section title without a blank line."
+  (interactive)
+  (if (use-region-p)
+      (let ((selected-text (buffer-substring-no-properties (region-beginning) (region-end))))
+        (save-excursion
+          ;; Rechercher ou créer la section "Auteurs cités"
+          (goto-char (point-min))
+          (unless (re-search-forward "^\\* Auteurs cités" nil t)
+            ;; Créer la section à la fin du document si elle n'existe pas
+            (goto-char (point-max))
+            (unless (bolp) (newline)) ;; Ajouter un saut de ligne si nécessaire
+            (insert "* Auteurs cités"))
+          ;; Aller à la fin du titre de la section
+          (re-search-forward "^\\* Auteurs cités" nil t)
+          (end-of-line)
+          ;; Vérifier si c'est la première entrée
+          (if (looking-at-p "\n- ")
+              (newline) ;; Si des entrées existent déjà, ajouter une nouvelle ligne
+            (insert "\n")) ;; Sinon, rester directement après le titre
+          ;; Ajouter l'entrée
+          (insert "- " selected-text)
+          ;; Afficher un message de confirmation
+          (message "Texte copié dans la section 'Auteurs cités'.")))
+    (message "Veuillez sélectionner du texte à copier.")))
+
+;; Assigner C-c C-c à la fonction, uniquement en org-mode
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-c") #'my/org-copy-to-cited-authors))
+#+end_src
+
 * Word wrapping and paragraph filling
 #+begin_src emacs-lisp
 (defun my-unfill-paragraph ()
