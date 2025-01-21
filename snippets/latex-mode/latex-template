@@ -14,7 +14,12 @@
 \usepackage{tablefootnote}
 \usepackage{array}
 \usepackage{tabularray}
-\geometry{hmargin=${1:2.5}cm,vmargin=${2:1.5}cm}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\geometry{hmargin=${1:4}cm,vmargin=${2:3}cm}
 
 \title{$3}
 
@@ -23,6 +28,7 @@
 \begin{document}
 
 \maketitle
+\setstretch{1.5}
 
 $0
 

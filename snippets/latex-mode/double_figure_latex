@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: double_figure_latex
+# key: figuredoubleh
+# --
+\begin{figure}[${1:!h}]
+  \centering
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{$2}
+    \caption{$3}
+  
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{$4}
+    \caption{$5}
+  
+  \end{subfigure}
+  \captionsetup{justification=justified, singlelinecheck=false, font=small}
+  \caption*{\underline{Note} : $6
+  \\\ \underline{Source} : $7}
+  \captionsetup{justification=centering, singlelinecheck=true, font=normalsize}
+  \caption{$8}
+  $0
+\end{figure}

@@ -14,7 +14,7 @@ $3 & $4 & $5 \\\
 \end{tabular}
 \captionsetup{justification=raggedright,singlelinecheck=false, font=small}
   \caption*{\underline{Note} : $7
-  \\ \underline{Source} : $8}
+  \\\ \underline{Source} : $8}
   \captionsetup{justification=centering, singlelinecheck=true, font=normalsize}
   \caption{$9}
 $0
