@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: header R
+# key: header
+# --
+# Header --------------------------------------------------------------------
+# Author: Romain CAPLIEZ
+# Email: romain.capliez01@gmail.com
+
+# Creation Date: $1
+
+# Script name: $2
+
+# Script Description: $3
+
+$0
