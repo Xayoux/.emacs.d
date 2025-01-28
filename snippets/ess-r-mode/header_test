@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: header_test
+# key: header_test
+# --
+message_test <- glue::glue("# $1 #")
+ligne_diez <- strrep("#", nchar(message_test))
+message(glue::glue("\n\n\n{ligne_diez}\n{message_test}\n{ligne_diez}\n\n"))
+$0
