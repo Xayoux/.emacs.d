@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: writelines
+# key: writelines
+# --
+writeLines(
+  substr($1, 1, nchar($1)-7), 
+  here($2)
+)
+
+$0

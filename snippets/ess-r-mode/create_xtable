@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: create_xtable
+# key: xtable
+# --
+xtable() |>
+  print.xtable(
+    include.rownames = FALSE,
+    include.colnames = FALSE,
+    only.contents = TRUE,
+    hline.after = NULL
+  )
+
+$0
