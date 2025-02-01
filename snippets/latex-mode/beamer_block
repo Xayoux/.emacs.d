@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: beamer_block
+# key: block
+# --
+\begin{block}{$1}
+  $0
+\end{block}
